@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package it.unitn.disi.informatica.FrancescoPenasa;
+
+/**
+ * @author ubuntu
+ *
+ */
+public class BPMNtoJAVA {
+
+	/**
+	 * 
+	 */
+	public BPMNtoJAVA() {
+		// TODO Auto-generated constructor stub
+	}
+
+}
