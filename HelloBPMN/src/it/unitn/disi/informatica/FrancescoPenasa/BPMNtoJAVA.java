@@ -72,7 +72,7 @@ public class BPMNtoJAVA {
 
 		if (doc != null) {
 			def = doc.getDefinitions();
-			System.out.println(def.getRootElements());
+			//System.out.println(def.getRootElements());
 			//print 
 			for (RootElement re : def.getRootElements()) {
 				if (re instanceof Process) {

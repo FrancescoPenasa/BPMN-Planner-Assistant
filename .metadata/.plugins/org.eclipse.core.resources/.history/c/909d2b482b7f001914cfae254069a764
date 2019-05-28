@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package it.unitn.disi.informatica.FrancescoPenasa;
+
+import java.util.List;
+
+import org.eclipse.bpmn2.Process;
+
+/**
+ * @author ubuntu
+ *
+ */
+public class DomainGenerator {
+
+	/**
+	 * 
+	 */
+	public DomainGenerator() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public DomainGenerator(BPMNtoJAVA bpmn) {
+		// TODO Auto-generated constructor stub
+		//doStuff();
+		
+		List<Process> allProcess = bpmn.getAllProcess();
+		for (Process p : allProcess) {
+			System.out.println(p.getId());
+		}
+	}
+
+}

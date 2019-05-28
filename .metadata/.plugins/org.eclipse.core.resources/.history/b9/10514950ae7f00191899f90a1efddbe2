@@ -1,0 +1,82 @@
+package it.unitn.disi.informatica.FrancescoPenasa;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.DocumentRoot;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+
+public class HelloBPMN {
+
+	private static String domain_file;
+	private static String prob_file;
+	private static String URL;
+
+	private static void input_manager(String[] args) {
+		for (int i = 2; i< args.length; i++){
+			String arg = args[i];
+			switch (arg) {
+			case "-i":
+				URL = args[++i];
+				break;
+				
+			case "-d":
+				domain_file = args[++i];
+				break;
+				
+			case "p":
+				prob_file = args[++i];	
+				break;			
+			default:
+				break;
+			}
+		}
+	}
+	
+	
+	
+	public static void main(String[] args) throws CoreException, IOException {
+		
+		// manage input
+		input_manager(args);
+		
+		//tmp URL FOR TEST
+		String URL1 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/Bp1.bpmn2");
+		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
+		
+		// extract from bpmn
+		BPMNtoJAVA bpmn = new BPMNtoJAVA(URL1);
+		
+		// generate domain
+		// and output domain   /*class for generate*/
+		DomainGenerator dg = new DomainGenerator(bpmn);
+		
+		// input modifier
+		
+		// generate prob file
+		// output prob file
+		ProblemGenerator pg = new ProblemGenerator(bpmn);
+		
+		
+		
+		
+		// trash
+		/*List<Process> allProcess = bpmn.getAllProcess();
+		for (Process p : allProcess) {
+			System.out.println(p.getId())*/;
+		//}
+	}
+}
+	

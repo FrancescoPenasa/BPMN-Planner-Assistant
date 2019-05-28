@@ -1,0 +1,9 @@
+package it.unitn.disi.informatica.FrancescoPenasa;
+
+class ProblemGenerator {
+
+	public ProblemGenerator() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

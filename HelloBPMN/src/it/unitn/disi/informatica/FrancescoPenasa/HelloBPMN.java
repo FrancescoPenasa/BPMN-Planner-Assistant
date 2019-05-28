@@ -20,17 +20,64 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 public class HelloBPMN {
 
-	public static void main(String[] args) throws CoreException {
+	private static String domain_file;
+	private static String prob_file;
+	private static String URL;
 
-		String URL1 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/Bp1.bpmn2");
-		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
-		
-		BPMNtoJAVA bpmn = new BPMNtoJAVA(URL2);
-		
-		List<Process> allProcess = bpmn.getAllProcess();
-		for (Process p : allProcess) {
-			System.out.println(p.getId());
+	private static void input_manager(String[] args) {
+		for (int i = 2; i< args.length; i++){
+			String arg = args[i];
+			switch (arg) {
+			case "-i":
+				URL = args[++i];
+				break;
+				
+			case "-d":
+				domain_file = args[++i];
+				break;
+				
+			case "p":
+				prob_file = args[++i];	
+				break;			
+			default:
+				break;
+			}
 		}
 	}
-
+	
+	
+	
+	public static void main(String[] args) throws CoreException, IOException {
+		
+		// manage input
+		input_manager(args);
+		
+		//tmp URL FOR TEST
+		String URL1 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/Bp1.bpmn2");
+		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
+		String URL3 = new String("/home/ubuntu/eclipse-workspace/HelloBPMN/simple_bpmn.bpmn2");
+		
+		// extract from bpmn
+		BPMNtoJAVA bpmn = new BPMNtoJAVA(URL3);
+		
+		// generate domain
+		// and output domain   /*class for generate*/
+		DomainGenerator dg = new DomainGenerator(bpmn, "TESTFILE");
+		
+		// input modifier
+		
+		// generate prob file
+		// output prob file
+		ProblemGenerator pg = new ProblemGenerator(bpmn, "TESTFILE");
+		
+		
+		
+		
+		// trash
+		/*List<Process> allProcess = bpmn.getAllProcess();
+		for (Process p : allProcess) {
+			System.out.println(p.getId())*/;
+		//}
+	}
 }
+	
