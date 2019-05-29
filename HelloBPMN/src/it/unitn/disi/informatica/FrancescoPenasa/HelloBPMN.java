@@ -24,6 +24,7 @@ public class HelloBPMN {
 	private static String prob_file;
 	private static String URL;
 
+	//can easily work from cli
 	private static void input_manager(String[] args) {
 		for (int i = 2; i< args.length; i++){
 			String arg = args[i];
@@ -52,32 +53,23 @@ public class HelloBPMN {
 		// manage input
 		input_manager(args);
 		
-		//tmp URL FOR TEST
-		String URL1 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/Bp1.bpmn2");
+		// tmp URL FOR TEST
+		String URL1 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/simple_bpmn.bpmn2");
 		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
-		String URL3 = new String("/home/ubuntu/eclipse-workspace/HelloBPMN/simple_bpmn.bpmn2");
 		
 		// extract from bpmn
-		BPMNtoJAVA bpmn = new BPMNtoJAVA(URL3);
+		BPMNtoJava bpmn = new BPMNtoJava(URL1);
 		
 		// generate domain
 		// and output domain   /*class for generate*/
 		DomainGenerator dg = new DomainGenerator(bpmn, "TESTFILE");
 		
-		// input modifier
+		// input modifier if neededdd
 		
 		// generate prob file
 		// output prob file
 		ProblemGenerator pg = new ProblemGenerator(bpmn, "TESTFILE");
 		
-		
-		
-		
-		// trash
-//		List<Process> allProcess = bpmn.getAllProcess();
-//		for (Process p : allProcess) {
-//			System.out.println(p.getId());
-//		}
 	}
 }
 	

@@ -25,59 +25,89 @@ public class DomainGenerator {
 	 * 
 	 */
 	
+	
 	final int OUTPUTDIM = 4;
 	
+	// CONSTANTS for WriteActions()
+	final String START_ACTION = new String("\t(:action ");
+	final String PARAMETERS_ACTION = new String("\n\t\t:parameters ");
+	final String PRECONDITIONS_ACTION = new String("\n\t\t:precondition ");
+	final String EFFECT_ACTION = new String("\n\t\t:effect ");
+	final String END_ACTION = new String(")\n\n");	
+	final String[] ACTION =  {START_ACTION, PARAMETERS_ACTION, 
+			PRECONDITIONS_ACTION, EFFECT_ACTION, END_ACTION};
+	
 	FileWriter writer = null;
-	String output_file = null;
+	String domainName = null;
+	
+	// used to access all the data in the bpmn file
+	BPMNtoJava bpmn = null;
+	
 	public DomainGenerator() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public DomainGenerator(BPMNtoJAVA bpmn, String output_file) throws IOException {
-		// TODO Auto-generated constructor stub
-		this.output_file = output_file;
+	public DomainGenerator(BPMNtoJava bpmn, String domainName) throws IOException {
+		// init static var
+		this.domainName = domainName;
+		this.bpmn = bpmn;
+		writer = new FileWriter(domainName + "_domain.pddl", true);
 		
-		// open FileWriter
-		writer = new FileWriter(output_file + "_domain.pddl", true);
-		
+		// start writing the domain file
 		writeIntro();
 		writeTypes(bpmn.getAllProcess());
 		writePredicates();
 		writeTaskActions(bpmn.getAllProcess());
 		writeOutro();
+		
+		// testing purpose
 		boolean test = doStuff(bpmn.getAllProcess());
 		
 		
 		// close FileWriter
+		writer.flush();
 		writer.close();
 		
-		System.out.flush();
-		System.out.println("writer closed");
-		
+		// rosik
+		System.out.flush();	
+		System.out.println("Domain generator finished!");
 	}
 
 
+	/**
+	 * Close the inital parentesis to make the domain file working
+	 * @throws IOException
+	 */
 	private void writeOutro() throws IOException {
 		final String OUTRO = new String(")");
 		writer.write(OUTRO);
 	}
 
-	private void writeIntro() throws IOException {
-		
+	/**
+	 * write definition and requirements on the domain file
+	 * @throws IOException
+	 */
+	private void writeIntro() throws IOException {	
 		final String INTRO = new String(";; domain file: ");
 		final String END_FILE_NAME = new String("_domain.pddl \n\n");
 		
-		writer.write(INTRO + output_file + END_FILE_NAME);		
-		writer.write("(define (domain " + output_file + ")\n");
+		writer.write(INTRO + domainName + END_FILE_NAME);		
+		writer.write("(define (domain " + domainName + ")\n");
 		writer.write("\t(:requirements :typing)\n");
 	}
 
+	/**
+	 * write the types
+	 * @param allProcess
+	 * @throws IOException
+	 */
 	private void writeTypes(List<Process> allProcess) throws IOException {
-		
 		final String INTRO = new String("\t(:types");
 		
 		List<String> types = new ArrayList<String>();
 		
+		
+		//TODO CHANGE
 		for (Process p : allProcess) {
 			for(LaneSet le : p.getLaneSets()) {
 				System.out.println("Lane set: " + le.getId());
@@ -93,7 +123,8 @@ public class DomainGenerator {
 			writer.write(" " + types.get(i));
 		}
 		
-		//tmp write lets see after
+		//TODO
+		//tmp write the type task lets see after
 		writer.write(" " + "task");
 		
 		writer.write(")\n");
@@ -137,7 +168,7 @@ public class DomainGenerator {
 	
 	
 	private void writeTaskActions(List<Process> processes) throws IOException {
-			
+		
 		final String INTRO = new String("\t(:action ");
 		final String PARAMETERS = new String("\n\t\t:parameters ");
 		final String PRECONDITIONS = new String("\n\t\t:precondition ");
@@ -169,6 +200,12 @@ public class DomainGenerator {
 				}
 			}
 		}
+	}
+	
+	private void writeActions() throws IOException {
+		
+		
+		
 	}
 
 	

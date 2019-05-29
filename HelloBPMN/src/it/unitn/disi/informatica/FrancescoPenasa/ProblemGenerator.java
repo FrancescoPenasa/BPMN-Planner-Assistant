@@ -6,7 +6,7 @@ class ProblemGenerator {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProblemGenerator(BPMNtoJAVA bpmn, String output_file) {
+	public ProblemGenerator(BPMNtoJava bpmn, String output_file) {
 		// TODO Auto-generated constructor stub
 	}
 }

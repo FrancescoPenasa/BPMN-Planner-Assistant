@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="org.eclipse.emf.ecore.EObject"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.ImportUtil"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.ModelUtil"/>
@@ -21,4 +22,39 @@
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Lane"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.LaneSet"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
+=======
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.ImportUtil"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.ModelUtil"/>
+<fullyQualifiedTypeName name="org.eclipse.emf.ecore.resource.Resource"/>
+<fullyQualifiedTypeName name="org.eclipse.emf.common.util.URI"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.DocumentRoot"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.RootElement"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="java.util.Collections"/>
+<fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+<fullyQualifiedTypeName name="javax.imageio.plugins.bmp.BMPImageWriteParam"/>
+<fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.BPMNtoJAVA"/>
+<fullyQualifiedTypeName name="java.lang.Boolean"/>
+<fullyQualifiedTypeName name="org.eclipse.osgi.framework.util.CaseInsensitiveDictionaryMap"/>
+<fullyQualifiedTypeName name="java.io.FileWriter"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Lane"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.LaneSet"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Relationship"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Process"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.BaseElement"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Documentation"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.SimpleTreeIterator.TreeIterator"/>
+<fullyQualifiedTypeName name="org.eclipse.emf.ecore.EObject"/>
+<fullyQualifiedTypeName name="org.eclipse.emf.common.util.TreeIterator"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowElement"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Task"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.SequenceFlow"/>
+<fullyQualifiedTypeName name="org.eclipse.bpmn2.Collaboration"/>
+>>>>>>> eed3b5f040c4df0417c21c687f85763c4d4e3358
 </qualifiedTypeNameHistroy>
