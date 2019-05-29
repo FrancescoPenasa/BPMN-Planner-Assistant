@@ -3,6 +3,9 @@
 <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="_r_658IJNEemtRbBV9TaMyA" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.4.3.Final-v20180418-1358-B1">
   <bpmn2:collaboration id="Collaboration_1" name="Collaboration 1">
     <bpmn2:participant id="Participant_1" name="Pool 1" processRef="#Process_1"/>
+    <bpmn2:participant id="Participant_2" name="Pool 2" processRef="#Process_2"/>
+    <bpmn2:messageFlow id="MessageFlow_1" sourceRef="#Task_1" targetRef="#Task_3"/>
+    <bpmn2:messageFlow id="MessageFlow_2" sourceRef="#Task_3" targetRef="#Task_2"/>
   </bpmn2:collaboration>
   <bpmn2:process id="Process_1" name="Pool 1 Process" definitionalCollaborationRef="#Collaboration_1">
     <bpmn2:startEvent id="StartEvent_1" name="Start Event 1">
@@ -23,12 +26,21 @@
     <bpmn2:sequenceFlow id="SequenceFlow_2" sourceRef="Task_1" targetRef="Task_2"/>
     <bpmn2:sequenceFlow id="SequenceFlow_3" sourceRef="Task_2" targetRef="EndEvent_1"/>
   </bpmn2:process>
+  <bpmn2:process id="Process_2" name="Pool 2 Process" definitionalCollaborationRef="#Collaboration_1">
+    <bpmn2:task id="Task_3" name="Task 3"/>
+  </bpmn2:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="#Collaboration_1">
       <bpmndi:BPMNShape id="BPMNShape_Participant_1" bpmnElement="#Participant_1" isHorizontal="true">
         <dc:Bounds height="150.0" width="500.0" x="290.0" y="330.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_1" labelStyle="#BPMNLabelStyle_1">
           <dc:Bounds height="35.0" width="14.0" x="296.0" y="387.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Participant_2" bpmnElement="#Participant_2" isHorizontal="true">
+        <dc:Bounds height="150.0" width="500.0" x="290.0" y="520.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_9" labelStyle="#BPMNLabelStyle_1">
+          <dc:Bounds height="35.0" width="14.0" x="296.0" y="577.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="#StartEvent_1">
@@ -55,6 +67,12 @@
           <dc:Bounds height="14.0" width="35.0" x="607.0" y="393.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Task_3" bpmnElement="#Task_3" isExpanded="true">
+        <dc:Bounds height="50.0" width="110.0" x="500.0" y="557.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_10" labelStyle="#BPMNLabelStyle_1">
+          <dc:Bounds height="14.0" width="35.0" x="537.0" y="575.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="#SequenceFlow_1" sourceElement="#BPMNShape_StartEvent_1" targetElement="#BPMNShape_Task_1">
         <di:waypoint xsi:type="dc:Point" x="375.0" y="400.0"/>
         <di:waypoint xsi:type="dc:Point" x="397.0" y="400.0"/>
@@ -72,6 +90,18 @@
         <di:waypoint xsi:type="dc:Point" x="703.0" y="400.0"/>
         <di:waypoint xsi:type="dc:Point" x="727.0" y="400.0"/>
         <bpmndi:BPMNLabel id="BPMNLabel_8"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_MessageFlow_1" bpmnElement="#MessageFlow_1" sourceElement="#BPMNShape_Task_1" targetElement="#BPMNShape_Task_3">
+        <di:waypoint xsi:type="dc:Point" x="530.0" y="408.0"/>
+        <di:waypoint xsi:type="dc:Point" x="555.0" y="408.0"/>
+        <di:waypoint xsi:type="dc:Point" x="555.0" y="557.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_11"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_MessageFlow_2" bpmnElement="#MessageFlow_2" sourceElement="#BPMNShape_Task_3" targetElement="#BPMNShape_Task_2">
+        <di:waypoint xsi:type="dc:Point" x="610.0" y="582.0"/>
+        <di:waypoint xsi:type="dc:Point" x="625.0" y="582.0"/>
+        <di:waypoint xsi:type="dc:Point" x="625.0" y="425.0"/>
+        <bpmndi:BPMNLabel id="BPMNLabel_12"/>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
     <bpmndi:BPMNLabelStyle id="BPMNLabelStyle_1">
