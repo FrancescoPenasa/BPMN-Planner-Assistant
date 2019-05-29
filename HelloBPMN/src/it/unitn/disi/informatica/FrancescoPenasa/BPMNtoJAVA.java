@@ -7,16 +7,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
+import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.Relationship;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -87,6 +96,9 @@ public class BPMNtoJAVA {
 				}
 			}
 		}
+		
+		testing();
+		
 	}
 	
 	public List<Process> getAllProcess() {
@@ -97,6 +109,38 @@ public class BPMNtoJAVA {
 			}
 		}
 		return allProcess;
+	}
+	
+	public void getRootElemOwnerDictionary() {
+		Map<String, String> map = new HashMap<String, String>();
+
+	}
+	
+	
+	
+	public void testing() {
+		
+		System.out.println("Definition" + def +"\n\n");
+		System.out.println("Definition.getRootElements" + def.getRootElements() +"\n\n");
+		for (RootElement re : def.getRootElements()) {
+			System.out.println("root elements are: " + re.getId());
+			
+			Process p = (Process) re;
+					
+			for(FlowElement fe : p.getFlowElements()) {
+				System.err.println("class" + fe.getClass().getSimpleName());
+				if (fe instanceof Task) {
+					Task t = (Task) fe;
+					
+					for(FlowElement ffe : t.getOutgoing())
+						System.out.println("INCOMING " + ffe.getId());
+				}
+					
+				System.out.println("child " + fe.getId());
+			
+			}
+
+		}
 	}
 }
 

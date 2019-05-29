@@ -74,10 +74,10 @@ public class HelloBPMN {
 		
 		
 		// trash
-		/*List<Process> allProcess = bpmn.getAllProcess();
-		for (Process p : allProcess) {
-			System.out.println(p.getId())*/;
-		//}
+//		List<Process> allProcess = bpmn.getAllProcess();
+//		for (Process p : allProcess) {
+//			System.out.println(p.getId());
+//		}
 	}
 }
 	
