@@ -49,8 +49,6 @@ public class DomainGenerator {
 	String domainName = null;
 	List<String> types = null;
 	
-	//this hsouldnt be here
-	List<String> predicates = null;
 	
 	// used to access all the data in the bpmn file
 	BPMNtoJava bpmn = null;
@@ -91,9 +89,7 @@ public class DomainGenerator {
 	public List<String> getAllTypes(){
 		return types;
 	}
-	public List<String> getAllPredicates(){
-		return predicates;
-	}
+	
 
 
 	/**
@@ -153,15 +149,13 @@ public class DomainGenerator {
 	
 	private void writePredicates() throws IOException {
 		final String INTRO = new String("\t(:predicates");
-		final String PREDICATE_HAS = new String("\n\t\t(has ?actor ?state)");
+		final String PREDICATE_HAS = new String("\n\t\t(has ?owner ?state)");
 		final String PREDICATE_AT = new String("\n\t\t(at ?state)");
+		final String PREDICATE_LINKED = new String("\n\t\t(linked ?state ?state)");
 		final String OUTRO = new String(")\n\n");
 		
-		predicates = new ArrayList<String>();	
-		predicates.add(PREDICATE_AT);
-		predicates.add(PREDICATE_HAS);
 		
-		writer.write(INTRO + PREDICATE_HAS + PREDICATE_AT + OUTRO);
+		writer.write(INTRO + PREDICATE_HAS + PREDICATE_AT + PREDICATE_LINKED + OUTRO);
 	}
 	
 	
@@ -185,10 +179,15 @@ public class DomainGenerator {
 		output[1] = "(?" + fromState.getId() + " - " + TASK_TYPE + " ?" + toState.getId() + " - " + TASK_TYPE + ")";
 		
 		//preconditions of the action
-		output[2] = "(and (at ?" + fromState.getId() + ")" + "(not (at ?" + toState.getId() + ")))";
+		output[2] = "(and "
+				+ "(at ?" + fromState.getId() + ")" 
+				+ "(not (at ?" + toState.getId() + "))"
+				+ "(linked ?" + fromState.getId() + " ?" + toState.getId() + "))";
 		
 		//effect of the action
-		output[3] = "(and (at ?" + toState.getId() + ")" + "(not (at ?" + fromState.getId() + ")))";
+		output[3] = "(and "
+				+ "(at ?" + toState.getId() + ")" 
+				+ "(not (at ?" + fromState.getId() + ")))";
 		
 		// because it looks good
 		output[4] = "";
@@ -211,6 +210,7 @@ public class DomainGenerator {
 				if (fe instanceof Task) {
 					fromTask = (Task) fe;
 					
+					//TODO REMOVE DIS SH
 					// all objects connected to the Task fromTask with a SequenceFlow
 					for (SequenceFlow sf : fromTask.getOutgoing()) {						
 						if (sf.getTargetRef() instanceof FlowElement) {

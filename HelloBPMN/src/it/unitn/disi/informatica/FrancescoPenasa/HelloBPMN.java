@@ -73,7 +73,9 @@ public class HelloBPMN {
 		// to write it in actions, predicates, add a type, and prob init
 		// generate prob file
 		// output prob file
-		ProblemGenerator pg = new ProblemGenerator(bpmn, "TESTFILE", dg.getAllPredicates());
+		
+		// change how action works
+		ProblemGenerator pg = new ProblemGenerator(bpmn, "TESTFILE");
 		
 	}
 }

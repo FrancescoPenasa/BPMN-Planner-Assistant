@@ -9,6 +9,7 @@ import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
 
@@ -29,7 +30,7 @@ class ProblemGenerator {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProblemGenerator(BPMNtoJava bpmn, String probName, List<String> predicates) throws IOException {
+	public ProblemGenerator(BPMNtoJava bpmn, String probName) throws IOException {
 		// init static var
 		this.probName = probName;
 		this.bpmn = bpmn;
@@ -101,13 +102,32 @@ class ProblemGenerator {
 		
 		writer.write(INTRO);
 	
-		String init = new String("");
-		String id = new String("");
+		;
 		
 		// HAS init
 		for (Process p : processes) {
 			for(FlowElement fe : p.getFlowElements()) {
 				writer.write("\t\t(has " + p.getId() + " " + fe.getId() + ")\n");
+				
+				// LINKED init
+				if (fe instanceof Task) {
+					Task from = (Task) fe;
+					for (SequenceFlow sf : from.getOutgoing()) {						
+						if (sf.getTargetRef() instanceof FlowElement) {
+							writer.write("\t\t(linked " + from.getId() + " "
+									+ sf.getTargetRef().getId() + ")\n");
+						}
+					}		
+				}
+				if (fe instanceof StartEvent) {
+					StartEvent from = (StartEvent) fe;
+					for (SequenceFlow sf : from.getOutgoing()) {						
+						if (sf.getTargetRef() instanceof FlowElement) {
+							writer.write("\t\t(linked " + from.getId() + " "
+									+ sf.getTargetRef().getId() + ")\n");
+						}
+					}		
+				}
 			}
 		}
 		
@@ -115,12 +135,13 @@ class ProblemGenerator {
 		//look all tasks, startEvent, stopEvent
 		for (Process p : processes) {
 			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof StartEvent) {
-					
+				if (fe instanceof StartEvent) {					
 					writer.write("\t\t(at " + fe.getId() + ")\n");
 				}
 			}
 		}
+		
+		
 		
 		writer.write(OUTRO);
 		
