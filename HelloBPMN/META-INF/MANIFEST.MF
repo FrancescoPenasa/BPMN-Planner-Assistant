@@ -3,6 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: HelloBPMN
 Bundle-SymbolicName: HelloBPMN
 Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: HelloBPMN
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.bpmn2;bundle-version="1.5.0",
  org.eclipse.bpmn2.edit;bundle-version="1.5.0",
  org.eclipse.bpmn2.editor;bundle-version="1.5.0",
@@ -10,5 +12,3 @@ Require-Bundle: org.eclipse.bpmn2;bundle-version="1.5.0",
  org.eclipse.bpmn2.modeler.help;bundle-version="1.4.3",
  org.eclipse.bpmn2.modeler.ui;bundle-version="1.4.3",
  org.eclipse.core.runtime;bundle-version="3.15.200"
-Automatic-Module-Name: HelloBPMN
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
