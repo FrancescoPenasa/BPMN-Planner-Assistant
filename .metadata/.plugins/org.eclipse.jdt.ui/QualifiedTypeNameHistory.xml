@@ -8,7 +8,6 @@
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.DocumentRoot"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.RootElement"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.Collections"/>
     <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
     <fullyQualifiedTypeName name="javax.imageio.plugins.bmp.BMPImageWriteParam"/>
@@ -18,14 +17,18 @@
     <fullyQualifiedTypeName name="java.io.FileWriter"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Lane"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.LaneSet"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Definitions"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Participant"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Collaboration"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.MessageFlow"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowElement"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.StartEvent"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.EndEvent"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.StartEvent"/>
+    <fullyQualifiedTypeName name="java.util.Dictionary"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

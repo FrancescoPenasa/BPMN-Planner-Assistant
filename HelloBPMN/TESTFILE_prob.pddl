@@ -4,13 +4,13 @@
 	(:domain TESTFILE)
 
 	(:objects
-		StartEvent_1 - Task
-		EndEvent_1 - Task
-		Task_1 - Task
-		Task_2 - Task
-		Task_3 - Task
-		StartEvent_2 - Task
-		Task_4 - Task
+		StartEvent_1 - task
+		EndEvent_1 - task
+		Task_1 - task
+		Task_2 - task
+		Task_3 - task
+		StartEvent_2 - task
+		Task_4 - task
 	)
 
 	(:init

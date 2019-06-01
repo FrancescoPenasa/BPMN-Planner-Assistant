@@ -4,10 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.bpmn2.Collaboration;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.LaneSet;
+import org.eclipse.bpmn2.MessageFlow;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.StartEvent;
@@ -162,7 +164,7 @@ class ProblemGenerator {
 			for(FlowElement fe : p.getFlowElements()) {
 				if (fe instanceof Task || fe instanceof StartEvent || fe instanceof EndEvent) {
 					objName = fe.getId();
-					objType = "Task";
+					objType = "task";
 					writer.write("\t\t" + objName + " - " + objType + "\n");
 				}
 			}
@@ -184,3 +186,20 @@ class ProblemGenerator {
 		writer.write("\t(:domain " + probName + ")\n\n");
 	}
 }
+
+
+
+
+/*// every messageFlow from a Task in the bpmn file
+for (Collaboration c : collaborations) {
+for(MessageFlow mf : c.getMessageFlows()) {
+	if (mf.getSourceRef() instanceof Task) {
+		fromTask = (Task) mf.getSourceRef();
+		toElement = (FlowElement) mf.getTargetRef();
+		output = createActionFromTask(fromTask, toElement);
+		for(int i = 0; i<OUTPUT_DIM; i++) {
+			writer.write(ACTION[i] + output[i]);
+		}
+	}							
+}
+}*/

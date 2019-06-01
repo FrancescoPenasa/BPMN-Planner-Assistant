@@ -6,7 +6,9 @@ package it.unitn.disi.informatica.FrancescoPenasa;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.bpmn2.Collaboration;
 import org.eclipse.bpmn2.FlowElement;
@@ -29,25 +31,8 @@ public class DomainGenerator {
 	 * 
 	 */
 	
-	
-	final int OUTPUT_DIM = 5;
-	
-	// CONSTANTS for WriteActions()
-	final String START_ACTION = new String("\t(:action ");
-	final String PARAMETERS_ACTION = new String("\n\t\t:parameters ");
-	final String PRECONDITIONS_ACTION = new String("\n\t\t:precondition ");
-	final String EFFECT_ACTION = new String("\n\t\t:effect ");
-	final String END_ACTION = new String(")\n\n");	
-	final String[] ACTION =  {START_ACTION, PARAMETERS_ACTION, 
-			PRECONDITIONS_ACTION, EFFECT_ACTION, END_ACTION};
-	
-	// CONSTATNS for Types
-	final String TASK_TYPE = new String("Task");
-	
-	
 	FileWriter writer = null;
 	String domainName = null;
-	List<String> types = null;
 	
 	
 	// used to access all the data in the bpmn file
@@ -65,7 +50,7 @@ public class DomainGenerator {
 		
 		// start writing the domain file
 		writeIntro();
-		writeTypes(bpmn.getAllProcess());
+		writeTypes();
 		writePredicates();
 		writeActions();
 		writeOutro();
@@ -83,15 +68,10 @@ public class DomainGenerator {
 		System.out.println("Domain generator finished!");
 	}
 	
-	/**
-	 * to get the types used
-	 */
-	public List<String> getAllTypes(){
-		return types;
-	}
+	
 	
 
-
+	//---------------------	GOOD ----------------\\
 	/**
 	 * Close the inital parentesis to make the domain file working
 	 * @throws IOException
@@ -101,6 +81,8 @@ public class DomainGenerator {
 		writer.write(OUTRO);
 	}
 
+	
+	//---------------------	GOOD ----------------\\
 	/**
 	 * write definition and requirements on the domain file
 	 * @throws IOException
@@ -113,191 +95,95 @@ public class DomainGenerator {
 		writer.write("(define (domain " + domainName + ")\n");
 		writer.write("\t(:requirements :typing)\n");
 	}
-
+	
+	//----------------- NEED TO ADD ALL TYPES ------------------\\
 	/**
 	 * write the types
 	 * @param allProcess
 	 * @throws IOException
 	 */
-	private void writeTypes(List<Process> processes) throws IOException {
-		final String INTRO = new String("\t(:types");
+	private void writeTypes() throws IOException {
 		
-		types = new ArrayList<String>();	
+		List<String>types = new ArrayList<String>();
+		types.add("state");
+		types.add("task - state");
+		types.add("startevent - state");
 		
-		//TODO CHANGE
-		for (Process p : processes) {
-			for(LaneSet le : p.getLaneSets()) {
-				System.out.println("Lane set: " + le.getId());
-				for(Lane l : le.getLanes()) {
-					System.out.println("Lane: " + l.getName());
-					types.add(l.getId());
-				}
-			}
+		writer.write("\t(:types\n");
+		for (String t : types) {
+			writer.write("\t\t" + t + "\n");
 		}
-		
-		//TODO
-		//tmp write the type task lets see after
-		types.add(TASK_TYPE);
-		
-		writer.write(INTRO);
-		for (int i = 0; i<types.size(); i++) {
-			writer.write(" " + types.get(i));
-		}
-		
-		writer.write(")\n");
+		writer.write("\t)\n\n");
 	}
 	
-	private void writePredicates() throws IOException {
-		final String INTRO = new String("\t(:predicates");
-		final String PREDICATE_HAS = new String("\n\t\t(has ?owner ?state)");
-		final String PREDICATE_AT = new String("\n\t\t(at ?state)");
-		final String PREDICATE_LINKED = new String("\n\t\t(linked ?state ?state)");
-		final String OUTRO = new String(")\n\n");
-		
-		
-		writer.write(INTRO + PREDICATE_HAS + PREDICATE_AT + PREDICATE_LINKED + OUTRO);
-	}
 	
+	//--------------- 	NEED TO ADD ALL PREDICATES ------------\\
+	private void writePredicates() throws IOException {	
+		
+		List<String> predicates = new ArrayList<String>();
+		predicates.add("(has ?owner ?state)");
+		predicates.add("(at ?state)");
+		predicates.add("(linked ?state ?state)");
+		
+		writer.write("\t(:predicates\n");
+		for (String t : predicates) {
+			writer.write("\t\t" + t + "\n");
+		}
+		writer.write("\t)\n\n");
+	}
+							
+	
+
 	
 	/**
-	 * Crea un'azione usando @param fromTask e @param toTask
-	 * mette in output le cose che servono per scrivere l'azione
-	 * index 0 nome dell'azione
-	 * index 1 i parametri necessari con relativi tipi
-	 * usando i predicati (at ?state) (has ?actor ?state)
-	 * devo cambiare il nome perchè fa anche da startevent a flowelement
-	 */
-	private String [] createActionFromTask(FlowElement fromState, FlowElement toState) {
-		String[] output = new String[OUTPUT_DIM];
-				
-		// name of the action with a space previously or there is mess
-		String from = fromState.getName().replaceAll(" ", "_");
-		String to = toState.getName().replaceAll(" ", "_");
-		output[0] = from + "_To_" + to;
-		
-		// parameters of the action
-		output[1] = "(?" + fromState.getId() + " - " + TASK_TYPE + " ?" + toState.getId() + " - " + TASK_TYPE + ")";
-		
-		//preconditions of the action
-		output[2] = "(and "
-				+ "(at ?" + fromState.getId() + ")" 
-				+ "(not (at ?" + toState.getId() + "))"
-				+ "(linked ?" + fromState.getId() + " ?" + toState.getId() + "))";
-		
-		//effect of the action
-		output[3] = "(and "
-				+ "(at ?" + toState.getId() + ")" 
-				+ "(not (at ?" + fromState.getId() + ")))";
-		
-		// because it looks good
-		output[4] = "";
-		return output;
-	}
-	
-	/**
-	 * takes all the task in the bpmn file 
+	 * write actions for cases task to something with SeqFlow 
+	 * and task to something with MesFlow
 	 * @param processes
 	 * @throws IOException
 	 */
-	private void writeTaskActions(List<Process> processes, List<Collaboration> collaborations) throws IOException {
-		String[] output = new String[OUTPUT_DIM];
-		Task fromTask = null;
-		FlowElement toElement = null;
-		
-		// every sequenceFlow from a Task in the bpmn file
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof Task) {
-					fromTask = (Task) fe;
-					
-					//TODO REMOVE DIS SH
-					// all objects connected to the Task fromTask with a SequenceFlow
-					for (SequenceFlow sf : fromTask.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							toElement = sf.getTargetRef();
-							System.out.println("\n\n ::: ");
-							System.out.println(toElement.getId());
-							output = createActionFromTask(fromTask, toElement);
-							
-							for(int i = 0; i<OUTPUT_DIM; i++) {
-								writer.write(ACTION[i] + output[i]);
-							}						
-						}
-					}		
-				}
-			}
-		}
-		
-		// every messageFlow from a Task in the bpmn file
-		for (Collaboration c : collaborations) {
-			for(MessageFlow mf : c.getMessageFlows()) {
-				if (mf.getSourceRef() instanceof Task) {
-					fromTask = (Task) mf.getSourceRef();
-					toElement = (FlowElement) mf.getTargetRef();
-					output = createActionFromTask(fromTask, toElement);
-					for(int i = 0; i<OUTPUT_DIM; i++) {
-						writer.write(ACTION[i] + output[i]);
-					}
-				}							
-			}
-		}
-	}
-		
+	private void writeFromTaskActions() throws IOException {
+		writer.write(""
+				+ "\t(:action TaskMove \n"
+				+ "\t\t:parameters   (?from - state ?to - state) \n"
+				+ "\t\t:precondition (and (at ?from) (not (at ?to)) (linked ?from ?to)) \n"
+				+ "\t\t:effect       (and (at ?to) (not (at ?from)))) \n\n");
+	}	
 	
-	
-	private void writeGatewayActions(List<Process> processes) {
+	/**
+	 * write 
+	 */
+	private void writeGatewayActions() {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/**
-	 * write all types of actions
-	 * @throws IOException
-	 */
-	private void writeActions() throws IOException {
-		writeStartEventActions(bpmn.getAllProcess());
-		writeTaskActions(bpmn.getAllProcess(), bpmn.getAllCollaborations());
-		writeGatewayActions(bpmn.getAllProcess());
-		
-	}
-
-	
 	
 	/**
 	 * assumption: start is always in a lane and his outgoing cannot be messageflow NEVER only 
 	 * sequenceFlow
 	 * @throws IOException 
 	 */
-
-	private void writeStartEventActions(List<Process> processes) throws IOException {
-		String[] output = new String[OUTPUT_DIM];
-		StartEvent start = null;
-		FlowElement toElement = null;
-		
-		// every sequenceFlow from a Task in the bpmn file
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof StartEvent) {
-					start = (StartEvent) fe;
-					
-					// all objects connected to the Task fromTask with a SequenceFlow
-					for (SequenceFlow sf : start.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							toElement = sf.getTargetRef();
-							System.out.println("\n\n ::: ");
-							System.out.println(toElement.getId());
-							output = createActionFromTask(start, toElement);
-							
-							for(int i = 0; i<OUTPUT_DIM; i++) {
-								writer.write(ACTION[i] + output[i]);
-							}						
-						}
-					}		
-				}
-			}
-		}
+	private void writeStartEventActions() throws IOException {
+		writer.write(""
+				+ "\t(:action StartMove \n"
+				+ "\t\t:parameters   (?from - state ?to - state) \n"
+				+ "\t\t:precondition (and (at ?from) (not (at ?to)) (linked ?from ?to)) \n"
+				+ "\t\t:effect       (and (at ?to) (not (at ?from)))) \n\n");
 	}
-	
+
+	/**
+	 * write all types of actions
+	 * @throws IOException
+	 */
+	private void writeActions() throws IOException {
+		//this isn't needed now
+		//writeStartEventActions();
+		
+		writeFromTaskActions();
+		writeGatewayActions();
+		
+	}
+
+		
 		
 		
 	
