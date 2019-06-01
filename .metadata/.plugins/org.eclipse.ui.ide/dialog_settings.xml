@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+<<<<<<< HEAD
 		<item value="/home/lithium/Desktop/dev/eclipse-workspace/HelloBPMN"/>
 		<item value="/home/lithium/dev/eclipse-workspace/HelloBPMN"/>
+=======
+		<item value="/home/ubuntu/eclipse-workspace/bpmnCollection"/>
+		<item value="/home/ubuntu/eclipse-workspace/External Plug-in Libraries"/>
+		<item value="/home/ubuntu/eclipse-workspace/Test"/>
+>>>>>>> 9e0054f9f2affcd604617a204ad5b1f2f25d730c
 		<item value="/home/lithium/Desktop/dev/HelloBPMN"/>
 		<item value="/home/ubuntu/eclipse-workspace/HelloBPMN"/>
 	</list>
