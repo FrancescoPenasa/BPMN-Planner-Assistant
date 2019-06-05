@@ -4,16 +4,6 @@
 	(:domain TESTFILE)
 
 	(:objects
-<<<<<<< HEAD
-		StartEvent_1 - task
-		EndEvent_1 - task
-		Task_1 - task
-		Task_2 - task
-		Task_3 - task
-		StartEvent_2 - task
-		Task_4 - task
-	)
-=======
 		StartEvent_1 - state
 		EndEvent_1 - state
 		Task_1 - state
@@ -21,7 +11,6 @@
 		Task_3 - state
 		StartEvent_2 - state
 		Task_4 - state)
->>>>>>> 9e0054f9f2affcd604617a204ad5b1f2f25d730c
 
 	(:init
 		(has Process_1 StartEvent_1)
@@ -47,9 +36,9 @@
 		(linked StartEvent_2 Task_4)
 		(linked Task_1 Task_3)
 		(linked Task_3 Task_2)
-		(linked Task_4 Task_3)		(at StartEvent_1)
-		(at StartEvent_2)
-)
+		(linked Task_4 Task_3)
+		(at StartEvent_1)
+		(at StartEvent_2))
 
 	(:goal
 		(at EndEvent_1))

@@ -20,6 +20,7 @@ import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.StartEvent;
 import org.eclipse.bpmn2.Task;
+import org.eclipse.core.internal.resources.File;
 
 /**
  * @author ubuntu
@@ -46,7 +47,10 @@ public class DomainGenerator {
 		// init static var
 		this.domainName = domainName;
 		this.bpmn = bpmn;
-		writer = new FileWriter(domainName + "_domain.pddl", true);
+		
+		OutputWriter w = new OutputWriter (domainName + "_domain.pddl");
+		writer = w.getFileWriter();
+		
 		
 		// start writing the domain file
 		writeIntro();
@@ -69,6 +73,12 @@ public class DomainGenerator {
 	}
 	
 	
+	
+/**
+ * 
+ * @param name
+ * @throws IOException
+ */
 	
 
 	//---------------------	GOOD ----------------\\
@@ -153,8 +163,8 @@ public class DomainGenerator {
 	 * write 
 	 */
 	private void writeGatewayActions() {
-		// TODO Auto-generated method stub
 		
+
 	}
 	
 	/**

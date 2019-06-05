@@ -38,7 +38,9 @@ class ProblemGenerator {
 		// init static var
 		this.probName = probName;
 		this.bpmn = bpmn;
-		writer = new FileWriter(probName + "_prob.pddl", true);
+		
+		OutputWriter w = new OutputWriter (probName + "_prob.pddl");
+		writer = w.getFileWriter();
 		
 		// start writing the prob file
 		// until (:domain ; first 4 rows

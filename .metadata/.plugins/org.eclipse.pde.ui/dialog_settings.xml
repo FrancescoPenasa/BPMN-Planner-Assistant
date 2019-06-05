@@ -15,11 +15,11 @@
 		<item key="ShowStatusLine" value="true"/>
 		<item key="History" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History/&gt;"/>
 		<section name="DialogBoundsSettings">
-			<item key="DIALOG_HEIGHT" value="567"/>
-			<item key="DIALOG_WIDTH" value="284"/>
+			<item key="DIALOG_HEIGHT" value="581"/>
+			<item key="DIALOG_WIDTH" value="291"/>
 			<item key="DIALOG_X_ORIGIN" value="254"/>
 			<item key="DIALOG_Y_ORIGIN" value="222"/>
-			<item key="DIALOG_FONT_NAME" value="1|Noto Sans|9.0|0|GTK|1|"/>
+			<item key="DIALOG_FONT_NAME" value="1|Roboto|10.0|0|GTK|1|"/>
 		</section>
 	</section>
 	<section name="targetStateView">

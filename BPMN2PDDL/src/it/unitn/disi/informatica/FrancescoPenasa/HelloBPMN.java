@@ -56,7 +56,7 @@ public class HelloBPMN {
 		input_manager(args);
 		
 		// tmp URL FOR TEST
-		String URL1 = new String("/home/ubuntu/eclipse-workspace/bpmnCollection/test.bpmn2");
+		String URL1 = new String("/home/francesco/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
 		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
 		
 		// extract from bpmn
