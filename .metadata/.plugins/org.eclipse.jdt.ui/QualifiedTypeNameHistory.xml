@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
 <qualifiedTypeNameHistroy/>
+=======
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.eclipse.core.internal.resources.File"/>
+<fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.OutputWriter"/>
+<fullyQualifiedTypeName name="java.io.FileWriter"/>
+</qualifiedTypeNameHistroy>
+>>>>>>> 2d36358a572f600c0babb4af2ae776a6bcf8d72e

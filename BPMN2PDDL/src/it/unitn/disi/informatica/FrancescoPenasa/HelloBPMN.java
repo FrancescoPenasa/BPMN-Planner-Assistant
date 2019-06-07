@@ -56,7 +56,11 @@ public class HelloBPMN {
 		input_manager(args);
 		
 		// tmp URL FOR TEST
+<<<<<<< HEAD:HelloBPMN/src/it/unitn/disi/informatica/FrancescoPenasa/HelloBPMN.java
 		String URL1 = new String("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
+=======
+		String URL1 = new String("/home/francesco/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
+>>>>>>> 2d36358a572f600c0babb4af2ae776a6bcf8d72e:BPMN2PDDL/src/it/unitn/disi/informatica/FrancescoPenasa/HelloBPMN.java
 		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
 		
 		// extract from bpmn
