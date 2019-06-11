@@ -39,3 +39,60 @@ v0.3 -> support artifacts
 
 
 exit code 1 -> output file already exist 
+
+non vengono presi in considerazione i nomi degli oggetti, eventuali specificità come la cardinalità dei sequenceFlow non è considerata
+
+complex gateway
+
+dev'essere supportato il pacchetto
+	> :typing :conditional-effects
+
+flow rappresentati as predicates sat
+
+sistemare gateway direction, oppure assumere che i gateway siano sempre
+
+[ASSUMPTION] messageFlow non può essere un input di Gateway, 
+[ASSUMPTION] starEvent non può andare in gateway
+[ASSUMPTION] gateways prende in incom e outcom solo cose presenti nella propria pool process 
+
+writeInit_LinkedGateways can be generalized
+
+[BUG] da aggiungere a object Process_1 
+
+exclusiveGateway può essere trattato come uno stato normale
+
+if ONE lane -> only process 
+if more lanes --> collaborations, than message flows
+
+DISEGNINO DELLA TYPE HIEARERCHY
+
+il tipo di azione da intraprendere dipende dallo stato in cui si è (at ?x)
+
+message and associations
+
+input option to activate obbligatory intermediateEvent
+input option to activate intermediateEvent as endEvent
+input option to considerate subprocess
+input option to considerate subchoreography
+event-based works as exclusive
+parallel-event based works as parallel gateway
+join  parallel gateway needs to see all the inputs
+
+exclusive con condition è già sistemato 
+
+todo messages
+
+coreography task is an task
+collapsed subprocess is a task
+[ASSUMPTION] data object funziona sempre
+ENDEVENT secondo la documentazione non ha uscite
+start event non ha uscite
+
+messageflow può usare eventi di tipo message
+
+v0.1 support process and sequence flow
+v0.2 support collaborations and message flow
+v0.3 support messages and associations
+1 support coreographyes
+
+pagina 79

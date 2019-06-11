@@ -22,7 +22,7 @@ public class HelloBPMN {
 
 	private static String domain_file;
 	private static String prob_file;
-	private static String URL;
+	public static String URL = new String("");
 
 	//can easily work from cli
 	private static void input_manager(String[] args) {
@@ -56,15 +56,10 @@ public class HelloBPMN {
 		input_manager(args);
 		
 		// tmp URL FOR TEST
-<<<<<<< HEAD:HelloBPMN/src/it/unitn/disi/informatica/FrancescoPenasa/HelloBPMN.java
-		String URL1 = new String("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
-=======
-		String URL1 = new String("/home/francesco/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
->>>>>>> 2d36358a572f600c0babb4af2ae776a6bcf8d72e:BPMN2PDDL/src/it/unitn/disi/informatica/FrancescoPenasa/HelloBPMN.java
-		String URL2 = new String("/home/ubuntu/dev/bpmnAndPddlEx/bpmn/test.bpmn2");
+		//String URL1 = new String("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
 		
 		// extract from bpmn
-		BPMNtoJava bpmn = new BPMNtoJava(URL1);
+		BPMNtoJava bpmn = new BPMNtoJava("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
 		
 		// generate domain
 		// and output domain   /*class for generate*/

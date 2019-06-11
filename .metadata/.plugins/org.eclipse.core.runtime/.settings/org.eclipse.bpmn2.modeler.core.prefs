@@ -1,10 +1,17 @@
 dialog.Definitions.x=70
 dialog.Definitions.y=27
+dialog.InclusiveGateway.tab=1
 dialog.Lane.x=70
 dialog.Lane.y=27
 dialog.Participant.x=70
 dialog.Participant.y=27
+dialog.ReceiveTask.tab=1
+dialog.StartEvent.tab=1
+dialog.Task.tab=1
 dialog.Task.x=70
 dialog.Task.y=27
 do.core.validation=true
 eclipse.preferences.version=1
+section.SequenceFlow.Documentation..expanded=true
+section.Task.Appearance..expanded=true
+section.Task.Documentation..expanded=true

@@ -7,10 +7,14 @@ import java.util.List;
 import org.eclipse.bpmn2.Collaboration;
 import org.eclipse.bpmn2.EndEvent;
 import org.eclipse.bpmn2.Event;
+import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.Gateway;
+import org.eclipse.bpmn2.InclusiveGateway;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.MessageFlow;
+import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.StartEvent;
@@ -73,6 +77,8 @@ class ProblemGenerator {
 	}
 
 	
+	
+	//-------------------- INIT -------------------///
 	private void writeInit(List<Process> processes, List<Collaboration> collaborations) throws IOException {
 		// intro
 		writer.write("\t(:init");
@@ -84,8 +90,45 @@ class ProblemGenerator {
 
 		writeInit_At(processes);
 		
+		writeInit_LinkedGateways(processes);
+		
 		//outro
 		writer.write(")\n\n");
+	}
+
+	private void writeInit_LinkedGateways(List<Process> processes) throws IOException {
+		for (Process p : processes) {
+			// for sequenceFlow
+			for(FlowElement fe : p.getFlowElements()) {
+				if (fe instanceof InclusiveGateway) {
+					InclusiveGateway from = (InclusiveGateway) fe;
+					for (SequenceFlow sf : from.getOutgoing()) {						
+						if (sf.getTargetRef() instanceof FlowElement) {
+							writer.write("\n\t\t(linked_Inclusive_Gateway " + from.getId() + " "
+									+ sf.getTargetRef().getId() + ")");
+						}
+					}		
+				}
+				if (fe instanceof ExclusiveGateway) {
+					ExclusiveGateway from = (ExclusiveGateway) fe;
+					for (SequenceFlow sf : from.getOutgoing()) {						
+						if (sf.getTargetRef() instanceof FlowElement) {
+							writer.write("\n\t\t(linked_Exclusive_Gateway " + from.getId() + " "
+									+ sf.getTargetRef().getId() + ")");
+						}
+					}		
+				}
+				if (fe instanceof ParallelGateway) {
+					ParallelGateway from = (ParallelGateway) fe;
+					for (SequenceFlow sf : from.getOutgoing()) {						
+						if (sf.getTargetRef() instanceof FlowElement) {
+							writer.write("\n\t\t(linked_Parallel_Gateway " + from.getId() + " "
+									+ sf.getTargetRef().getId() + ")");
+						}
+					}		
+				}
+			}
+		}		
 	}
 
 	private void writeInit_At(List<Process> processes) throws IOException {
@@ -97,6 +140,8 @@ class ProblemGenerator {
 			}
 		}
 	}
+	
+	
 	/**
 	 * find outgoing sequenFlow and messageFlow from every 1..1 node in bpmn file
 	 * @param processes
@@ -125,6 +170,7 @@ class ProblemGenerator {
 					}		
 				}
 			}
+		}
 			
 			// for messageFlow
 			for (Collaboration c : collaborations) {
@@ -142,7 +188,7 @@ class ProblemGenerator {
 								+ to.getId() + ")");
 					}
 				}
-			}
+			
 		}
 	}
 
@@ -159,6 +205,8 @@ class ProblemGenerator {
 		}
 	}
 
+	
+	//------------------------ OBJECTS ------------------------//
 	//TODO ADD objects
 	private void writeObjects(List<Process> processes) throws IOException {
 		writer.write("\t(:objects");
@@ -169,8 +217,32 @@ class ProblemGenerator {
 		writer.write(")\n\n");
 	}
 
-	private void writeObjects_Gate(List<Process> processes) {
-		// TODO Auto-generated method stub	
+	private void writeObjects_Gate(List<Process> processes) throws IOException {
+		String objName = new String("");
+		String objType = new String("");
+		
+		//look all Gateway
+		for (Process p : processes) {
+			for(FlowElement fe : p.getFlowElements()) {
+				if (fe instanceof InclusiveGateway) {
+					InclusiveGateway g = (InclusiveGateway) fe;
+					g.getGatewayDirection();
+					objName = fe.getId();    
+					objType = "incGateway";
+					writer.write("\n\t\t" + objName + " - " + objType);
+				}
+				if (fe instanceof ExclusiveGateway) {
+					objName = fe.getId();    
+					objType = "exGateway";
+					writer.write("\n\t\t" + objName + " - " + objType);
+				}
+				if (fe instanceof ParallelGateway) {
+					objName = fe.getId();    
+					objType = "parGateway";
+					writer.write("\n\t\t" + objName + " - " + objType);
+				}
+			}
+		}	
 	}
 
 	
@@ -182,12 +254,22 @@ class ProblemGenerator {
 	private void writeObjects_State(List<Process> processes) throws IOException {
 		String objName = new String("");
 		String objType = new String("");
-		//look all tasks, startEvent, stopEvent
+		//look all tasks, startEvent, endEvent
 		for (Process p : processes) {
 			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof Task || fe instanceof StartEvent || fe instanceof EndEvent) {
+				if (fe instanceof Task ) {
 					objName = fe.getId();
-					objType = "state";
+					objType = "activities";
+					writer.write("\n\t\t" + objName + " - " + objType);
+				}
+				if (fe instanceof StartEvent ) {
+					objName = fe.getId();
+					objType = "startEvents";
+					writer.write("\n\t\t" + objName + " - " + objType);
+				}
+				if (fe instanceof EndEvent ) {
+					objName = fe.getId();
+					objType = "endEvents";
 					writer.write("\n\t\t" + objName + " - " + objType);
 				}
 			}
@@ -223,6 +305,9 @@ class ProblemGenerator {
 	 * @param processes
 	 * @throws IOException
 	 */
+	
+	
+	//-------------- GOAL ----------------------------//
 	private void writeGoal(List<Process> processes) throws IOException {
 		writer.write("\t(:goal");
 		
