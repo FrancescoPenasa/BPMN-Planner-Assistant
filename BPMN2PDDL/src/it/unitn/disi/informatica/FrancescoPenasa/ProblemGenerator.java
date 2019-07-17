@@ -22,320 +22,197 @@ import org.eclipse.bpmn2.Task;
 
 class ProblemGenerator {
 	
-	// CONSTANTS for predicates
-	final int AT = 0;
-	final int HAS = 1;
-	final int LINKED = 2;
-	
-	FileWriter writer = null;
-	String probName = null;
-	
-	// used to access all the data in the bpmn file
-	BPMNtoJava bpmn = null;
+	private FileWriter writer = null;
+	final private String DIR = "";
 
-	
-	public ProblemGenerator() {
-		// TODO Auto-generated constructor stub
-	}
 
-	public ProblemGenerator(BPMNtoJava bpmn, String probName) throws IOException {
-		// init static var
-		this.probName = probName;
-		this.bpmn = bpmn;
+	/**
+	 * 
+	 * @param domain
+	 * @param objects
+	 * @param init
+	 * @param goals
+	 * @throws IOException
+	 */
+	public ProblemGenerator(String domain, String objects, String init, String goals) throws IOException {
 		
-		OutputWriter w = new OutputWriter (probName + "_prob.pddl");
+		// open the writer 
+		OutputWriter w = new OutputWriter (domain + "_prob0.pddl");
 		writer = w.getFileWriter();
 		
 		// start writing the prob file
 		// until (:domain ; first 4 rows
-		writeIntro();
-
+		writeIntro(domain);
+		
 		//(:objects
-		writeObjects(bpmn.getAllProcess());
+		writeObjects(objects);
 		
 		//init state
-		writeInit(bpmn.getAllProcess(), bpmn.getAllCollaborations());
+		writeInit(init);
 		
 		//goal state
-		writeGoal(bpmn.getAllProcess());
+		writeGoal(goals);
 		
-		//last parenthesissss
+		//last parenthesiS
 		writeOutro();
 		
-		// testing purpose
-		//boolean test = doStuff(bpmn.getAllProcess());
-		
-		
-		// close FileWriter
 		writer.flush();
 		writer.close();
 		
-		// rosik
 		System.out.flush();	
-		System.out.println("Prob generator finished!");
-		// TODO Auto-generated constructor stub
-	}
-
-	
-	
-	//-------------------- INIT -------------------///
-	private void writeInit(List<Process> processes, List<Collaboration> collaborations) throws IOException {
-		// intro
-		writer.write("\t(:init");
-	
-		
-		writeInit_Has(processes);
-
-		writeInit_Linked(processes, collaborations);
-
-		writeInit_At(processes);
-		
-		writeInit_LinkedGateways(processes);
-		
-		//outro
-		writer.write(")\n\n");
-	}
-
-	private void writeInit_LinkedGateways(List<Process> processes) throws IOException {
-		for (Process p : processes) {
-			// for sequenceFlow
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof InclusiveGateway) {
-					InclusiveGateway from = (InclusiveGateway) fe;
-					for (SequenceFlow sf : from.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							writer.write("\n\t\t(linked_Inclusive_Gateway " + from.getId() + " "
-									+ sf.getTargetRef().getId() + ")");
-						}
-					}		
-				}
-				if (fe instanceof ExclusiveGateway) {
-					ExclusiveGateway from = (ExclusiveGateway) fe;
-					for (SequenceFlow sf : from.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							writer.write("\n\t\t(linked_Exclusive_Gateway " + from.getId() + " "
-									+ sf.getTargetRef().getId() + ")");
-						}
-					}		
-				}
-				if (fe instanceof ParallelGateway) {
-					ParallelGateway from = (ParallelGateway) fe;
-					for (SequenceFlow sf : from.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							writer.write("\n\t\t(linked_Parallel_Gateway " + from.getId() + " "
-									+ sf.getTargetRef().getId() + ")");
-						}
-					}		
-				}
-			}
-		}		
-	}
-
-	private void writeInit_At(List<Process> processes) throws IOException {
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof StartEvent) {					
-					writer.write("\n\t\t(at " + fe.getId() + ")");
-				}
-			}
-		}
+		System.out.println("Standard Prob generator finished!");
 	}
 	
-	
-	/**
-	 * find outgoing sequenFlow and messageFlow from every 1..1 node in bpmn file
-	 * @param processes
-	 * @throws IOException
-	 */
-	private void writeInit_Linked(List<Process> processes, List<Collaboration> collaborations) throws IOException {
-		for (Process p : processes) {
-			// for sequenceFlow
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof Task) {
-					Task from = (Task) fe;
-					for (SequenceFlow sf : from.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							writer.write("\n\t\t(linked " + from.getId() + " "
-									+ sf.getTargetRef().getId() + ")");
-						}
-					}		
-				}
-				if (fe instanceof Event) {
-					Event from = (Event) fe;
-					for (SequenceFlow sf : from.getOutgoing()) {						
-						if (sf.getTargetRef() instanceof FlowElement) {
-							writer.write("\n\t\t(linked " + from.getId() + " "
-									+ sf.getTargetRef().getId() + ")");
-						}
-					}		
-				}
-			}
-		}
-			
-			// for messageFlow
-			for (Collaboration c : collaborations) {
-				for(MessageFlow mf : c.getMessageFlows()) {
-					if (mf.getSourceRef() instanceof Task && mf.getTargetRef() instanceof FlowElement) {
-						Task from = (Task) mf.getSourceRef();
-						FlowElement to = (FlowElement) mf.getTargetRef();
-						writer.write("\n\t\t(linked " + from.getId() + " "
-								+ to.getId() + ")");
-					}
-					if (mf.getSourceRef() instanceof Event && mf.getTargetRef() instanceof FlowElement) {
-						Event from = (Event) mf.getSourceRef();
-						FlowElement to = (FlowElement) mf.getTargetRef();
-						writer.write("\n\t\t(linked " + from.getId() + " "
-								+ to.getId() + ")");
-					}
-				}
-			
-		}
-	}
 
 	/**
-	 * write the owner of each state
-	 * @param processes
+	 * constructor n.2 the one with the 
+	 * @param domain
+	 * @param objects
+	 * @param init
+	 * @param goals
+	 * @param costrain
+	 * @param condition
 	 * @throws IOException
 	 */
-	private void writeInit_Has(List<Process> processes) throws IOException {
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				writer.write("\n\t\t(has " + p.getId() + " " + fe.getId() + ")");
-			}
-		}
-	}
-
-	
-	//------------------------ OBJECTS ------------------------//
-	//TODO ADD objects
-	private void writeObjects(List<Process> processes) throws IOException {
-		writer.write("\t(:objects");
-
-		writeObjects_State(processes);
-		writeObjects_Gate(processes);
+	public ProblemGenerator(String domain, String objects, String init, String goals, String [] costrains, boolean [] condition) throws IOException {
 		
-		writer.write(")\n\n");
-	}
-
-	private void writeObjects_Gate(List<Process> processes) throws IOException {
-		String objName = new String("");
-		String objType = new String("");
+		// open the writer 
+		OutputWriter w = new OutputWriter (domain + "_prob0.pddl");
+		writer = w.getFileWriter();
 		
-		//look all Gateway
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof InclusiveGateway) {
-					InclusiveGateway g = (InclusiveGateway) fe;
-					g.getGatewayDirection();
-					objName = fe.getId();    
-					objType = "incGateway";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-				if (fe instanceof ExclusiveGateway) {
-					objName = fe.getId();    
-					objType = "exGateway";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-				if (fe instanceof ParallelGateway) {
-					objName = fe.getId();    
-					objType = "parGateway";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-			}
-		}	
+		// start writing the prob file
+		// until (:domain ; first 4 rows
+		writeIntro(domain, costrains);
+		
+		//(:objects
+		writeObjects(objects);
+		
+		//init state
+		writeInit(init, costrains);		
+
+		//goal state
+		writeGoal(goals);
+		
+		//goal state
+		writeMetric(costrains, condition);
+		
+		//last parenthesiS
+		writeOutro();
+		
+		writer.flush();
+		writer.close();
+		
+		System.out.flush();	
+		System.out.println("Constrains Prob generator finished!");
 	}
 
-	
-	/**
-	 * il tipo state rappresenta i nodi che hanno cardinalita 1..1
-	 * @param processes
-	 * @throws IOException
-	 */
-	private void writeObjects_State(List<Process> processes) throws IOException {
-		String objName = new String("");
-		String objType = new String("");
-		//look all tasks, startEvent, endEvent
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof Task ) {
-					objName = fe.getId();
-					objType = "activities";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-				if (fe instanceof StartEvent ) {
-					objName = fe.getId();
-					objType = "startEvents";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-				if (fe instanceof EndEvent ) {
-					objName = fe.getId();
-					objType = "endEvents";
-					writer.write("\n\t\t" + objName + " - " + objType);
-				}
-			}
-		}
-	}
-	
-	
 
-	//-------------------- OK ---------------------------//
 	/**
 	 * write definition and requirements on the domain file
 	 * @throws IOException
 	 */
-	private void writeIntro() throws IOException {	
-		final String INTRO = new String(";; problem file: ");
-		final String END_FILE_NAME = new String("_prob.pddl \n\n");
-		
-		writer.write(INTRO + probName + END_FILE_NAME);		
-		writer.write("(define (problem " + probName + ")\n");
-		writer.write("\t(:domain " + probName + ")\n\n");
+	private void writeIntro(String DOMAIN) throws IOException {		
+		writer.write(";; problem file: " + DOMAIN + "_prob0.pddl \n\n");		
+		writer.write("(define (problem " + DOMAIN + "_prob0)\n");
+		writer.write("\t(:domain " + DOMAIN + ")\n\n");
 	}
+	
+	/**
+	 * write definition and requirements on the domain file
+	 * @throws IOException
+	 */
+	private void writeIntro(String DOMAIN, String [] costrains) throws IOException {	
+		String constrain = "";
+		for (int i = 0; i < costrains.length; i++) {
+			constrain += costrains[i].replaceAll(" ", "_");
+		}
+		writer.write(";; problem file: " + DOMAIN + "_" + constrain + ".pddl \n\n");		
+		writer.write("(define (problem " + DOMAIN + "_" + constrain + ")\n");
+		writer.write("\t(:domain " + DOMAIN + ")\n\n");
+	}
+	
+	
+	//-------------------- INIT -------------------///
+	// (at rabbit a) (at carrot b) (at box c)
+	/**
+	 * 
+	 * @param INIT
+	 * @throws IOException
+	 */
+	private void writeInit(String INIT) throws IOException {
+		writer.write("\t(:init\n");
+		writer.write("\t\t" + INIT + "\n");
+		writer.write("\t)\n\n");
+	}
+	
+	//-------------------- INIT -------------------///
+	// (at rabbit a) (at carrot b) (at box c)
+	/**
+	 * 
+	 * @param INIT
+	 * @throws IOException
+	 */
+	private void writeInit(String INIT, String [] costrains) throws IOException {
+		writer.write("\t(:init\n");
+		writer.write("\t\t" + INIT + "\n");
+		for (int i = 0; i < costrains.length; i++) {
+			writer.write("\t\t(= " + costrains[i] + "0)\n");
+		}
+		writer.write("\t)\n\n");
+	}
+	
+	
+	//------------------------ OBJECTS ------------------------//
+	// OBJ should be something like carrot rabbit box a b c
+	/**
+	 * 
+	 * @param OBJ
+	 * @throws IOException
+	 */
+	private void writeObjects(String OBJ) throws IOException {
+		writer.write("\t(:objects\n");
+		writer.write("\t\t" + OBJ + "\n");
+		writer.write("\t)\n\n");
+	}
+	
 
+	
 
-//------------------ ok ------------------------//
+	/**
+	 * 
+	 * @throws IOException
+	 */
 	private void writeOutro() throws IOException {
 		final String OUTRO = new String(")");
 		writer.write(OUTRO);
 	}
 
-//------------------------OK-------------------------//
-	/**
-	 * write goal
-	 * @param processes
-	 * @throws IOException
-	 */
-	
 	
 	//-------------- GOAL ----------------------------//
-	private void writeGoal(List<Process> processes) throws IOException {
-		writer.write("\t(:goal");
+	private void writeGoal(String goal) throws IOException {
+		writer.write("\t(:goal\n");
+		writer.write("\t\t" + goal + "\n");
+		writer.write("\t)\n");
+	}
+
+	private void writeMetric(String[] costrains, boolean [] condition) throws IOException {
+		writer.write("\t(:metric \n");
 		
-		//find all EndEvent in the bpmn2 file
-		for (Process p : processes) {
-			for(FlowElement fe : p.getFlowElements()) {
-				if (fe instanceof EndEvent) {
-					writer.write("\n\t\t(at " + fe.getId() + ")");
-				}
+		for (int i = 0; i < costrains.length; i++) {
+			if (condition[i]) {
+				writer.write( "\t\t(minimize (" + costrains[i] + "))\n");
+			}
+			else {
+				writer.write( "\t\t(maximize (" + costrains[i] + "))\n");
 			}
 		}
-		writer.write(")\n");
+		
+		writer.write("\t)\n");		
+	}
+
+
+	public Object getPath() {
+		// TODO Auto-generated method stub
+		return "pat";
 	}
 }
-
-
-
-
-/*// every messageFlow from a Task in the bpmn file
-for (Collaboration c : collaborations) {
-for(MessageFlow mf : c.getMessageFlows()) {
-	if (mf.getSourceRef() instanceof Task) {
-		fromTask = (Task) mf.getSourceRef();
-		toElement = (FlowElement) mf.getTargetRef();
-		output = createActionFromTask(fromTask, toElement);
-		for(int i = 0; i<OUTPUT_DIM; i++) {
-			writer.write(ACTION[i] + output[i]);
-		}
-	}							
-}
-}*/

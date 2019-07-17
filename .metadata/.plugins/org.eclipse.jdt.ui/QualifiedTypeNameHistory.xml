@@ -5,4 +5,18 @@
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.ExclusiveGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.ParallelGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.StartEvent"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.InputManager"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="java.lang.ProcessBuilder.Redirect"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.io.InputStream"/>
+    <fullyQualifiedTypeName name="java.io.Writer"/>
+    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+    <fullyQualifiedTypeName name="java.io.Reader"/>
+    <fullyQualifiedTypeName name="java.io.BufferedReader"/>
+    <fullyQualifiedTypeName name="java.io.StringWriter"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
 </qualifiedTypeNameHistroy>

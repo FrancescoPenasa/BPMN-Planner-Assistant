@@ -96,3 +96,50 @@ v0.3 support messages and associations
 1 support coreographyes
 
 pagina 79
+
+
+
+
+# v 2.0 
+
+- in input va ->
+	- bpmn2 file
+	- init state in pddl where the process stopped
+	- pddl domain for the bpmn2 file
+	- goal states (possono essere iterati per trovare una soluzione)
+	- (optional) more ppdl domain about the envirorment (less priority)
+	- (optional) again more pddl domain
+	- (optional) parametri di preferenza with || per avere più scelte o
+
+- output va ->
+	- path trovato con il minor numero di passaggi
+	- paths trovati con i parametri di preferenza 
+
+## input_manager 
+> DONE
+
+## BPMN2 EXTRACTOR
+> DONE
+
+## REACH GOAL FROM INIT WITH PDDL SUPER_DOMAIN
+	 ### ASDF
+	 ### GENERATE PDDL_PROB_FILE
+	 ##### OBJ
+	 ##### INIT
+	 ##### GOAL
+
+	 ### EXE a PLANNER IN JAVA 
+
+## LOOK AT THE RESULT
+
+## REACH GOAL FROM INIT WITH PDDL DOMAIN
+
+## LOOK AT THE RESULT
+
+## REACH GOAL FROM INIT WITH PDDL SUBDOMAIN
+
+## LOOK AT THE RESULTS
+
+## USE THE RESULTS TO GENERATE A NEW BPMN FILE
+
+## PRINT SOMETHING MEANINGFUL
