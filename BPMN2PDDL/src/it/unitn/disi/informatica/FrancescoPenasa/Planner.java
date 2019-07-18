@@ -1,6 +1,7 @@
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,6 +19,8 @@ import java.util.List;
 
 
 public class Planner {
+	
+	private String outputPath = "";
 
 	/**
 	 * vado a capire il planner utilizzato, in base al tipo di planner posso descrivere come andrà fatta la chiamata.
@@ -28,20 +31,23 @@ public class Planner {
 	 * @param outputPath
 	 * @param planner
 	 */
-	public Planner(String plannerPath, String domainPath, String problemPath, String outputPath, String planner) {
+	public Planner(String plannerPath, String domainPath, String problemPath, String planner) {
 		List<String> argv = manage_planner(planner);
+		this.outputPath = problemPath.replaceFirst(".", "_") + "_output.txt";
+		File file = new File(this.outputPath);
+		this.outputPath = file.getAbsolutePath();
 		
 		String response = "";
 		String command = plannerPath + " "
 				+ argv.get(0) + " " + domainPath + " "
 				+ argv.get(1) + " " + problemPath + " "
-				+ argv.get(2) + " " + outputPath + " ";
+				+ argv.get(2) + " " + this.outputPath + " ";
 		boolean waitForResponse = true;
+		
+		System.out.println("Linux command: " + command);
 	
 		ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
 		pb.redirectErrorStream(true);
-
-		System.out.println("Linux command: " + command);
 
 		try {
 			Process shell = pb.start();
@@ -59,27 +65,22 @@ public class Planner {
 
 				shellIn.close();
 			}
-
-		}
-
-		catch (IOException e) {
+		} catch (IOException e) {
+			System.out.println("Error occured while executing Linux command. Error Description: "
+					+ e.getMessage());
+		} catch (InterruptedException e) {
 			System.out.println("Error occured while executing Linux command. Error Description: "
 					+ e.getMessage());
 		}
-
-		catch (InterruptedException e) {
-			System.out.println("Error occured while executing Linux command. Error Description: "
-					+ e.getMessage());
-		}
+		
 		
 		System.out.println("Planner closed, result in --> " + outputPath);
 	}
 	
 	
+
 	/**
 	 * take the planner name and returns the parameters used to call the planner
-	 * parameter for the domain input for the problem input file
-	 * and for the result output file.
 	 * @param planner
 	 * @return
 	 */
@@ -89,45 +90,12 @@ public class Planner {
 		
 		switch (planner) {
 		case "strips":
-			argv.add("-f");
-			argv.add("-o");
-			argv.add("-g");
-			break;
 		case "blackbox":
 			argv.add("-o");
 			argv.add("-f");
 			argv.add("-g");
 			break;
-		case "colin2":
-			argv.add("-f");
-			argv.add("-o");
-			argv.add("-g");
-			break;
-		case "popf2":
-			argv.add(" ");
-			argv.add(" ");
-			argv.add(" ");
-			break;
-		case "ff":
-			argv.add("-f");
-			argv.add("-o");
-			argv.add("-g");
-			break;
-		case "optic":
-			argv.add("-f");
-			argv.add("-o");
-			argv.add("-g");
-			break;
-			
-		case "satplan":
-			argv.add("-f");
-			argv.add("-o");
-			argv.add("-g");
-			break;
-			
 		default:
-			System.err.println("planner not supported, "
-					+ "will be used the standard syntax -> domain problem output");
 			argv.add(" ");
 			argv.add(" ");
 			argv.add(" ");
@@ -164,6 +132,12 @@ public class Planner {
 		else {
 			return "";
 		}
+	}
+
+
+
+	public String getOutputURL() {
+		return this.outputPath;
 	}
 
 }

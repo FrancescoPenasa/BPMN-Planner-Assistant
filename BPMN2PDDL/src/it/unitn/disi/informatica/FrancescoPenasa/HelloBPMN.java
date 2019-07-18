@@ -28,72 +28,95 @@ public class HelloBPMN {
 	
 	//======================== PARAMETERS =============================//
 	
-	
 	//--------------------------public ----------------------------//
-	// mandatory input variables
-	public static String URL = "";
-	public static String SUPER_DOMAIN = "";
-	public static String OBJ = "";
-	public static String INIT = "";
-	public static String GOAL = "";
-	public static String PLANNER = "";
-	public static String OUTPUT = "";
+	// mandatory input parameters
+	public static String bpmn_url = "";
 	
-	// optional input
-	public static String DOMAIN = "";
-	public static String SUBDOMAIN = "";
-	public static String BEST_CONDITIONS = "";
+	public static String domain_name = "";
+	public static String domain_url = "";
 	
+	public static String problem_obj = "";
+	public static String problem_init = "";
+	public static String problem_goal = "";
 	
+	public static String planner_name = "";
+	public static String planner_url = "";
 	
-	
+	// optional input parameters
+	public static String domain_ex_url = "";
+	public static String domain_env_url = "";
+	public static String problem_max_conditions = "";
+	public static String problem_min_conditions = "";
+		
 	
 	// =========================== METHODS ============================//
-	//--------------------------- input handlers ------------//
-	//can easily work from cli
+	
+	/**
+	 * input handler 
+	 * @param args
+	 */
 	private static void input_manager(String[] args) {
 		for (int i = 0; i< args.length; i++){
 			String arg = args[i];
 			switch (arg) {
 			case "-b":
 			case "--bpmn":
-				URL = args[++i];
+				bpmn_url = args[++i];
 				break;
 			
 			case "-i":
 			case "--init":
-				INIT = args[++i];
+				problem_init = args[++i];
 				break;
 			
 			case "-o":
 			case "--obj":
-				OBJ = args[++i];
+				problem_obj = args[++i];
 				break;
 			
-			case "-sd":
-			case "--sudomainPDDL":
-				SUPER_DOMAIN = args[++i];
+			case "-dex":
+			case "--domain_ex_url":
+				domain_ex_url = args[++i];
 				
 				break;
 			case "-g":
 			case "--goal":
-				GOAL = args[++i];
+				problem_goal = args[++i];
 				break;
 						
-			case "-d":
-			case "--domainPDDL":
-				DOMAIN = args[++i];
+			case "-du":
+			case "--domain-url":
+				domain_url = args[++i];
 				break;
 				
-			case "-dd":
-			case "--submainPDDL":
-				SUBDOMAIN = args[++i];
+			case "-dn":
+			case "--domain-name":
+				domain_name = args[++i];
 				break;
 				
-			case "-bc":
-			case "--goal_condition":
-				BEST_CONDITIONS = args[++i];
+			case "-p":
+			case "--planner":
+				planner_name = args[++i];
 				break;
+				
+			case "-pu":
+			case "--planner-url":
+				planner_url = args[++i];
+				break;
+				
+			case "-denv":
+			case "--domain_env_url":
+				domain_env_url = args[++i];
+				break;
+				
+			case "-max":
+				problem_max_conditions = args[++i];
+				break;
+				
+			case "-min":
+				problem_min_conditions = args[++i];
+				break;
+	
 			
 			case "-h":
 			case "--help":
@@ -109,20 +132,53 @@ public class HelloBPMN {
 			}
 			
 		}
-		check_input_validity();
+		check_mandatory_input();
 	}
+
 	
-	// check that mandatory parameters aren't empty
-	private static void check_input_validity() {
-		if (URL.isEmpty() || SUPER_DOMAIN.isEmpty() || OBJ.isEmpty() || INIT.isEmpty() || GOAL.isEmpty()) {
-			System.err.println("wrong usage, use java bpmnpddl --help for the correct one");
+	/**
+	 * check that mandatory input parameters aren't empty
+	 */
+	private static void check_mandatory_input() {
+		if (bpmn_url.isEmpty() || domain_name.isEmpty() || domain_url.isEmpty()
+				|| problem_goal.isEmpty() || problem_init.isEmpty() || problem_obj.isEmpty()
+				|| planner_name.isEmpty() || planner_url.isEmpty()) {
+			System.err.println("wrong usage, use java bpmnpddl --help to see the correct usage");
 		}
 	}
 	
-	// show the help page
+	
+	/**
+	 * show help page
+	 */
 	private static void help() {
 		System.out.println("stampare papiro di informazioni; necessario planner con supporto a :strips, a :fluents per "
-				+ "le best conditions e a tutti i requirements specificati nel pddl domain input ovviamente.");
+				+ "le best conditions e a tutti i requirements specificati nel pddl domain input ovviamente."
+				+ ""
+				+ "-h || --help -> print this"
+				+ "-b || --bpmn -> url of the bpmn2 file"
+				+ "-dn || --domain-name -> name of the domain (ex. -dn hanoi), you can find it in the pddl domain file after (define (domain $DOMAIN)"
+				+ "-du || --domain-url  -> url of the pddl file that describe the domain"
+				+ "-o || --obj 	-> objectsto use in PDDL problem fileS that will be generated"
+				+ "-i || --init -> "
+				+ "-g || --goal -> "
+				+ "-p || --planner 		-> planner name (ex. -p colin2, -p symple)"
+				+ "-pu || --planner-url -> url where to find the planner to use"
+				+ ""
+				+ "-dex || --domain_ex_url"
+				+ "-denv || --domain_env_url"
+				+ "-max -> conditions that you want to maximize (ex. \"(fuel)\")"
+				+ "-min -> conditions that you want to minimize (ex. \"(time) (price)\""
+				+ ""
+				+ "Usage: -b /home/log/fails/hanoi.bpmn2 -dn hanoi -du $path/hanoi_domain.pddl "
+				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3)\""
+				+ "-p popf2 -pu /home/user/dev/planner/popf2/plan"
+				+ ""	
+				+ "Usage: -b /home/log/fails/rocket.bpmn2 -dn rocket -du /home/dev/pddl/rocket_domain.pddl "
+				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3)\""
+				+ "-p symple2 -pu /home/user/dev/planner/symple2/plan"
+				+ "-min \"(price) (time)\""	
+				+ "");
 		System.exit(0);
 	}
 	
@@ -136,58 +192,66 @@ public class HelloBPMN {
 	 */
 	public static void main(String[] args) throws CoreException, IOException {
 		
+		
 		/* manage input */
 		//input_manager(args);
 		
 		/* extract bpmn */
-		//BPMNtoJava bpmn = new BPMNtoJava("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
+		//BpmnToJava bpmn = new BpmnToJava(bpmn_url);
 		
-		// ----------- PHASE 1 ---------- //
-		/* CREATE A PROBLEM PDDL FILE FOR THE EASY TASK */ 
-		// name of domain, string with objs, strign describing init, string describing goal
-		//ProblemGenerator pr = new ProblemGenerator ("pippo", "robot1 robot2 robot3", "(at robot1) (has robot2 robot3)", "(to roboton)");
-		//ProblemGenerator pr = new ProblemGenerator (DOMAIN, OBJ, INIT, GOAL);		
+		/* ------------------------- PHASE 1 ------------------------ */
+		/* ----- CREATE A PROBLEM PDDL FILE FOR THE EASY TASK ------- */ 
+		/* ---------------------------------------------------------- */
+		
+		// input ex: ("pippo", "robot1 - r robot2 - t robot3", "(at robot1) (has robot2 robot3)", "(to roboton)");
+		//ProblemGenerator pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal);				
+		//String problem_url = pr.getUrl();
 		
 		/* execute the planner on the domain and problem file and create an output file */
-		//Planner planner = new Planner(PLANNER, DOMAIN, PROBLEM, OUTPUT, type PLANNER);
-		/*Planner planner = new Planner("/home/lithium/dev/bpmnAndPddlEx/pddl/blackbox", 
-				"/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_domain.pddl", 
-				"/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_prob.pddl", "/home/lithium/rocket_sol.txt", "blackbox");
-		*/
-		/* watch the output file */ 
-		//-------------------------------//
-		//(OUTPUT, type PLANNER);
-		OutputValidator ov = new OutputValidator ("/home/lithium/rocket_sol.txt", "sing");
-
-		/* stampo la riuscita o meno della situa */ 
+		// input ex: ("/home/lithium/dev/bpmnAndPddlEx/pddl/blackbox", "/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_domain.pddl", 
+		//		"/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_prob.pddl", "/home/lithium/rocket_sol.txt", "blackbox");
+		//Planner planner = new Planner(planner_url, domain_url, problem_url, planner_name);
+		//String output_url = planner.getOutputURL();
+		
+		/* sanitize output file from unwanted data */ 
+		//OutputSanitizer ov = new OutputSanitizer (output_url, planner_name);
+		
+		/* creo un nuovo bpmn2 con i nuovi stati */
+		//bpmn			TODO TODO TODO
+		//ov.getStates();
 		
 		
-		/* creo un nuovo bpmn2 con il risultato */
+		// --------------- PHASE 2 ------------- //
+		/* ------------------------------------- */		
+		/* ------------------------------------- */
 		
-		
-		//  ----------- PHASE 2 ------------ //
 		/* genero un problema per ogni set di best conditions */
-		// eseguo la fase uno con laggiunta delle best practice
+		ProblemGenerator advanced_pr = new ProblemGenerator ("pippo_with_condition1", "robot1 - t robot2 - r robot3", "(at robot1) (has robot2 robot3)", "(to roboton)", "(price)", "");		
+		//pr = new ProblemGenerator (DOMAIN.getName(), OBJ, INIT, GOAL, costaits, minize == true maximize == false);		
+		//String domain, String objects, String init, String goals, String [] costrains, boolean [] condition
+		//problem_url = advanced_pr.getUrl();
 		
+		//planner = new Planner(planner_url, domain_url, problem_url, planner_name);
+		//output_url = planner.getOutputURL();
+		
+		//ov = new OutputSanitizer (output_url, planner_name);
+		
+		/* creo un nuovo bpmn2 con i nuovi stati */
+		//bpmn			TODO TODO TODO
+		//ov.getStates();
 		
 
+	
 		/* STAMPO LA FINE */
 		
 	}
 	
-	// =========================== DEBUG TIME ============================//
+	// =========================== DEBUG ============================//
 	/**
 	 * JUST PRINT TO UNDERSTAND IF INPUT IS WHATS INTENDED
 	 */
 	private static void DEBUG() {
-		System.out.println("URL BPMN2: " + URL);
-		System.out.println("SUPER_DOMAIN: " + SUPER_DOMAIN);
-		System.out.println("OBJ: " + INIT);
-		System.out.println("INIT: " + INIT);
-		System.out.println("GOAL: " + GOAL);
-		System.out.println("DOMAIN: " + DOMAIN);
-		System.out.println("SUBDOMAIN: " + SUBDOMAIN);
-		System.out.println("BEST_CONDITIONS: " + BEST_CONDITIONS);
+		System.err.println("DEBUG MODE: ON");
 	}
 }
 	

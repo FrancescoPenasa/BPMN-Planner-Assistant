@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
  * @author ubuntu
  *
  */
-public class BPMNtoJava {
+public class BpmnToJava {
 
 	/**
 	 * 
@@ -44,7 +44,7 @@ public class BPMNtoJava {
 	private Definitions def;
 	
 	/** does everything that is needed to import a bpmn2 file in java **/
-	public BPMNtoJava (String URL){		
+	public BpmnToJava (String URL){		
 		// all the messy stuff that need to be done
 		init(URL);
 		

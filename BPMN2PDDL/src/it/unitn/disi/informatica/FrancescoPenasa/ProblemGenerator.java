@@ -1,5 +1,6 @@
 package it.unitn.disi.informatica.FrancescoPenasa;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -23,11 +24,15 @@ import org.eclipse.bpmn2.Task;
 class ProblemGenerator {
 	
 	private FileWriter writer = null;
-	final private String DIR = "";
+	
+	private String nameFile = "";
+	
 
 
 	/**
-	 * 
+	 * questo costruttore si occupa di costrure il file pddl problem con le caratteristiche base,
+	 * cioè, si occupa di costruire un file di problem.pddl conforme alle caratteristiche di PDDL 1.1
+	 * con i requirements :strips :typing
 	 * @param domain
 	 * @param objects
 	 * @param init
@@ -35,10 +40,12 @@ class ProblemGenerator {
 	 * @throws IOException
 	 */
 	public ProblemGenerator(String domain, String objects, String init, String goals) throws IOException {
-		
+		this.nameFile = domain + "_prob.pddl";
 		// open the writer 
-		OutputWriter w = new OutputWriter (domain + "_prob0.pddl");
+		OutputWriter w = new OutputWriter (nameFile);
 		writer = w.getFileWriter();
+		File file = new File(this.nameFile);
+		this.nameFile = file.getAbsolutePath();
 		
 		// start writing the prob file
 		// until (:domain ; first 4 rows
@@ -63,9 +70,15 @@ class ProblemGenerator {
 		System.out.println("Standard Prob generator finished!");
 	}
 	
+	private String generateNameFile (String constraints) {
+		String name = constraints;
+		name = name.replaceAll("\\(", "_");
+		name = name.replaceAll("\\)", "");
+		return name;
+	}
 
 	/**
-	 * constructor n.2 the one with the 
+	 * questo costruttore si occupa di generare un file problem.pddl con nome @param domain + "_prob
 	 * @param domain
 	 * @param objects
 	 * @param init
@@ -74,36 +87,39 @@ class ProblemGenerator {
 	 * @param condition
 	 * @throws IOException
 	 */
-	public ProblemGenerator(String domain, String objects, String init, String goals, String [] costrains, boolean [] condition) throws IOException {
-		
-		// open the writer 
-		OutputWriter w = new OutputWriter (domain + "_prob0.pddl");
+	public ProblemGenerator(String domain, String objects, String init, String goals, String max_constraints, String min_constraints) throws IOException {
+		String constrains = max_constraints + min_constraints;
+		// open the writer and create a new file called "domain_prob_constraint0_constraint1_.pddl
+		this.nameFile = domain + "_prob" + generateNameFile(constrains) + ".pddl";
+		OutputWriter w = new OutputWriter (nameFile);
 		writer = w.getFileWriter();
+		File file = new File(this.nameFile);
+		this.nameFile = file.getAbsolutePath();
 		
-		// start writing the prob file
-		// until (:domain ; first 4 rows
-		writeIntro(domain, costrains);
+		// write info for the planner as the name of the problem and the domain
+		writeIntro(domain, constrains);
 		
-		//(:objects
+		// write objects
 		writeObjects(objects);
 		
-		//init state
-		writeInit(init, costrains);		
+		// write the init states, and init the constrans at 0
+		writeInit(init, constrains);		
 
-		//goal state
+		// write the goal states
 		writeGoal(goals);
 		
-		//goal state
-		writeMetric(costrains, condition);
+		// write the metric conditions used to prefer output that
+		writeMetric(max_constraints, min_constraints);
 		
-		//last parenthesiS
+		// write the end of the file
 		writeOutro();
 		
 		writer.flush();
 		writer.close();
 		
 		System.out.flush();	
-		System.out.println("Constrains Prob generator finished!");
+		System.out.println(nameFile + " has been generated!");
+		System.out.flush();	
 	}
 
 
@@ -121,13 +137,13 @@ class ProblemGenerator {
 	 * write definition and requirements on the domain file
 	 * @throws IOException
 	 */
-	private void writeIntro(String DOMAIN, String [] costrains) throws IOException {	
-		String constrain = "";
-		for (int i = 0; i < costrains.length; i++) {
-			constrain += costrains[i].replaceAll(" ", "_");
-		}
-		writer.write(";; problem file: " + DOMAIN + "_" + constrain + ".pddl \n\n");		
-		writer.write("(define (problem " + DOMAIN + "_" + constrain + ")\n");
+	private void writeIntro(String DOMAIN, String constraints) throws IOException {	
+		constraints = constraints.replaceAll(" ", "_");
+		constraints = constraints.replaceAll("\\(", "");
+		constraints = constraints.replaceAll("\\)", "");
+		
+		writer.write(";; problem file: " + DOMAIN + "_" + constraints + ".pddl \n\n");		
+		writer.write("(define (problem " + DOMAIN + "_" + constraints + ")\n");
 		writer.write("\t(:domain " + DOMAIN + ")\n\n");
 	}
 	
@@ -152,11 +168,15 @@ class ProblemGenerator {
 	 * @param INIT
 	 * @throws IOException
 	 */
-	private void writeInit(String INIT, String [] costrains) throws IOException {
+	private void writeInit(String INIT, String constraint) throws IOException {
 		writer.write("\t(:init\n");
 		writer.write("\t\t" + INIT + "\n");
-		for (int i = 0; i < costrains.length; i++) {
-			writer.write("\t\t(= " + costrains[i] + "0)\n");
+		
+		String [] constraints = constraint.split("\\)");
+		
+		for (int i = 0; i < constraints.length; i++) {
+			int index = constraints[i].indexOf("(");
+			writer.write("\t\t(= (" + constraints[i].substring(index+1) + ") 0)\n");
 		}
 		writer.write("\t)\n\n");
 	}
@@ -195,15 +215,25 @@ class ProblemGenerator {
 		writer.write("\t)\n");
 	}
 
-	private void writeMetric(String[] costrains, boolean [] condition) throws IOException {
+	private void writeMetric(String maximize, String minimize) throws IOException {
 		writer.write("\t(:metric \n");
 		
-		for (int i = 0; i < costrains.length; i++) {
-			if (condition[i]) {
-				writer.write( "\t\t(minimize (" + costrains[i] + "))\n");
+		String [] maximize_constraints = maximize.split("\\)");
+		String [] minimize_constraints = minimize.split("\\)");
+		
+		if (maximize.length() > 1) {
+			writer.write("\t\tmaximize ");
+			for (int i = 0; i < maximize_constraints.length; i++) {
+				int index = maximize_constraints[i].indexOf("(");
+				writer.write("(" + maximize_constraints[i].substring(index+1) + ")\n");
 			}
-			else {
-				writer.write( "\t\t(maximize (" + costrains[i] + "))\n");
+		}
+		
+		if (minimize.length() > 1) {
+			writer.write("\t\tminimize ");
+			for (int i = 0; i < minimize_constraints.length; i++) {
+				int index = minimize_constraints[i].indexOf("(");
+				writer.write( "(" + minimize_constraints[i].substring(index+1) + ")\n");
 			}
 		}
 		
@@ -215,4 +245,9 @@ class ProblemGenerator {
 		// TODO Auto-generated method stub
 		return "pat";
 	}
+
+	public String getUrl() {
+		return this.nameFile;
+	}
+
 }

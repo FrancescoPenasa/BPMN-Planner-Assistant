@@ -37,13 +37,13 @@ public class DomainGenerator {
 	
 	
 	// used to access all the data in the bpmn file
-	BPMNtoJava bpmn = null;
+	BpmnToJava bpmn = null;
 	
 	public DomainGenerator() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public DomainGenerator(BPMNtoJava bpmn, String domainName) throws IOException {
+	public DomainGenerator(BpmnToJava bpmn, String domainName) throws IOException {
 		// init static var
 		this.domainName = domainName;
 		this.bpmn = bpmn;
