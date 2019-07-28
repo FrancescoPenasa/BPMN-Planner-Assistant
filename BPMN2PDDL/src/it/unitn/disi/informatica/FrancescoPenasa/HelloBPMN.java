@@ -39,12 +39,9 @@ public class HelloBPMN {
 	public static String problem_init = "";
 	public static String problem_goal = "";
 	
-	public static String planner_name = "";
 	public static String planner_url = "";
 	
 	// optional input parameters
-	public static String domain_ex_url = "";
-	public static String domain_env_url = "";
 	public static String problem_max_conditions = "";
 	public static String problem_min_conditions = "";
 		
@@ -73,12 +70,7 @@ public class HelloBPMN {
 			case "--obj":
 				problem_obj = args[++i];
 				break;
-			
-			case "-dex":
-			case "--domain_ex_url":
-				domain_ex_url = args[++i];
 				
-				break;
 			case "-g":
 			case "--goal":
 				problem_goal = args[++i];
@@ -95,18 +87,8 @@ public class HelloBPMN {
 				break;
 				
 			case "-p":
-			case "--planner":
-				planner_name = args[++i];
-				break;
-				
-			case "-pu":
 			case "--planner-url":
 				planner_url = args[++i];
-				break;
-				
-			case "-denv":
-			case "--domain_env_url":
-				domain_env_url = args[++i];
 				break;
 				
 			case "-max":
@@ -142,7 +124,7 @@ public class HelloBPMN {
 	private static void check_mandatory_input() {
 		if (bpmn_url.isEmpty() || domain_name.isEmpty() || domain_url.isEmpty()
 				|| problem_goal.isEmpty() || problem_init.isEmpty() || problem_obj.isEmpty()
-				|| planner_name.isEmpty() || planner_url.isEmpty()) {
+				|| planner_url.isEmpty()) {
 			System.err.println("wrong usage, use java bpmnpddl --help to see the correct usage");
 		}
 	}
@@ -162,22 +144,19 @@ public class HelloBPMN {
 				+ "-o || --obj 	-> objectsto use in PDDL problem fileS that will be generated"
 				+ "-i || --init -> "
 				+ "-g || --goal -> "
-				+ "-p || --planner 		-> planner name (ex. -p colin2, -p symple)"
-				+ "-pu || --planner-url -> url where to find the planner to use"
+				+ "-p || --planner-url -> url where to find the planner to use"
 				+ ""
-				+ "-dex || --domain_ex_url"
-				+ "-denv || --domain_env_url"
 				+ "-max -> conditions that you want to maximize (ex. \"(fuel)\")"
 				+ "-min -> conditions that you want to minimize (ex. \"(time) (price)\""
 				+ ""
 				+ "Usage: -b /home/log/fails/hanoi.bpmn2 -dn hanoi -du $path/hanoi_domain.pddl "
 				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3)\""
-				+ "-p popf2 -pu /home/user/dev/planner/popf2/plan"
+				+ "-p \"/home/user/dev/planner/popf2/plan domain0 prob0 output0\""
 				+ ""	
 				+ "Usage: -b /home/log/fails/rocket.bpmn2 -dn rocket -du /home/dev/pddl/rocket_domain.pddl "
 				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3)\""
-				+ "-p symple2 -pu /home/user/dev/planner/symple2/plan"
-				+ "-min \"(price) (time)\""	
+				+ "-p \"/home/user/dev/planner/blackbox -o domain0 -f prob0  -g output0\""
+				+ "-min \"(total-cost)\""	
 				+ "");
 		System.exit(0);
 	}
@@ -198,6 +177,7 @@ public class HelloBPMN {
 		
 		/* extract bpmn */
 		//BpmnToJava bpmn = new BpmnToJava(bpmn_url);
+		Bpmn2Java bpmn = new Bpmn2Java("/home/lithium/dev/eclipse-workspace/bpmnCollection/simple.bpmn2");
 		
 		/* ------------------------- PHASE 1 ------------------------ */
 		/* ----- CREATE A PROBLEM PDDL FILE FOR THE EASY TASK ------- */ 
@@ -210,40 +190,36 @@ public class HelloBPMN {
 		/* execute the planner on the domain and problem file and create an output file */
 		// input ex: ("/home/lithium/dev/bpmnAndPddlEx/pddl/blackbox", "/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_domain.pddl", 
 		//		"/home/lithium/dev/bpmnAndPddlEx/pddl/exercise/rocket_prob.pddl", "/home/lithium/rocket_sol.txt", "blackbox");
-		//Planner planner = new Planner(planner_url, domain_url, problem_url, planner_name);
+		//Planner planner = new Planner(planner_url, domain_url, problem_url);
 		//String output_url = planner.getOutputURL();
 		
+		// testing
+		String output_url = "/home/lithium/dev/eclipse-workspace/bpmnCollection/simple.bpmn2";
+		//---
+		
 		/* sanitize output file from unwanted data */ 
-		//OutputSanitizer ov = new OutputSanitizer (output_url, planner_name);
+		OutputSanitizer ov = new OutputSanitizer (output_url, domain_url);
+		
+		// testing//
+		List<String> lis = new ArrayList<String>();
+		lis.add("(gira_le_uova)");
+		lis.add("(fai_frittata)");
+		String url = "/home/lithium/dev/eclipse-workspace/bpmnCollection/simple.bpmn2";
+		String init = "Task_1";
+		String to = "Task_3";	
+		//---
 		
 		/* creo un nuovo bpmn2 con i nuovi stati */
-		//bpmn			TODO TODO TODO
-		//ov.getStates();
+		BpmnUpdater bu = new BpmnUpdater(lis, bpmn, url, init, to);			
 		
 		
-		// --------------- PHASE 2 ------------- //
-		/* ------------------------------------- */		
-		/* ------------------------------------- */
-		
-		/* genero un problema per ogni set di best conditions */
-		ProblemGenerator advanced_pr = new ProblemGenerator ("pippo_with_condition1", "robot1 - t robot2 - r robot3", "(at robot1) (has robot2 robot3)", "(to roboton)", "(price)", "");		
-		//pr = new ProblemGenerator (DOMAIN.getName(), OBJ, INIT, GOAL, costaits, minize == true maximize == false);		
-		//String domain, String objects, String init, String goals, String [] costrains, boolean [] condition
-		//problem_url = advanced_pr.getUrl();
-		
-		//planner = new Planner(planner_url, domain_url, problem_url, planner_name);
-		//output_url = planner.getOutputURL();
-		
-		//ov = new OutputSanitizer (output_url, planner_name);
-		
-		/* creo un nuovo bpmn2 con i nuovi stati */
-		//bpmn			TODO TODO TODO
-		//ov.getStates();
-		
-
+		/* print */ 
+		System.out.println("finito");
+		System.out.println("piano completato con " + lis.size() + " stati.");
+		System.out.println("cost totale " + lis.size());
+		System.out.println("aggiunt " + lis.size() + " task a bpmn.");
 	
-		/* STAMPO LA FINE */
-		
+		/* STAMPO LA FINE */		
 	}
 	
 	// =========================== DEBUG ============================//

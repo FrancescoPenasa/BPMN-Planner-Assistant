@@ -3,6 +3,7 @@
  */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,64 +16,95 @@ import java.util.List;
  */
 public class OutputSanitizer {
 
-	final int STATE_LIMIT = 100;
 	List<String> states_list = new ArrayList<String>();
-	private String planner;
 	
 	/**
-	 * open the output file and collect all the states
+	 * cerca il file output, perch[ non e' detto che sia uguale a quello immesso nel planner alcuni planner
+	 * generano file tipo output.txt1 output.txt2. PRENDO sempre il primo (o l'ultimo devo ancora decidere)
+	 * dal file output prendo le righe piu' in basso nel file che contengono delle parentesi e sono consecutive
+	 * pulisco le righe raccolte, raccogliendo solo il testo all'interno della parentesi
+	 * metto in state_list le azioni pulite e circondate da parentesi
 	 * @param output_path
 	 * @param planner
 	 * @throws IOException
 	 */
-	public OutputSanitizer(String output_path, String planner) throws IOException {
-		this.planner = planner;
-		List<String> lim = manage_planner();
+	public OutputSanitizer(String output_path, String domain_path) {
 		
-		FileReader fr = new FileReader(output_path); 
+		// collect actions from domain 
+		// TODO List<String> actions = collectActions(domain_path);
 		
-		String [] states = new String[STATE_LIMIT];
-		states[0] = "";
-	    int i = 0;
+		// verifica quanti output ci sono --> soluzione per il fatto che alcuni planner producono pi\ output
+		output_path = parseOutputPath(output_path);
+ 
 		
-	    boolean plan = false;
+		List<String> states = null;
+		
 		boolean reading = false;
-	    
-		int c; 
-	    //This loop will read characters and found 
-		//character will be stored in b.
-	    while ((c=fr.read()) != -1) { 
-	    	
-	    	if (reading) {
-		    	// find the first action
-		    	if ((char) c == '(' || plan) {
-		    		plan = true;
-			    	states[i] += (char) c;
-			    	
-			    	// se finisce un azione passa all'elemento successivo dell'arrey;
-			    	if ((char) c == ')') {
-			    		states[++i] = "\n";
-			    		plan = false;
-			    	}
-		    	}
-	    	}  	    	
-	    	
-	    	/* for the cases that starts with a parenthesys */ 
-	    	if (lim.get(0).equals('(')) { // if DELIMITATORE iniziale è ( cerco il primo ( per poter cominciare
-	    		if ((char) c == '(') {
-	    			reading = true;
-	    		}
-	    	} else {	// se il delimitatore iniziale è diverso allora non mi devo preoccupare
-	    		reading = true;
-	    	}
-	    }
-	    
-	    // export the results	    
-	    export_states(states);
-	    
+	    //This loop will read lines 
+		try (BufferedReader br = new BufferedReader(new FileReader(output_path))) {
+			String line;
+			while((line = br.readLine()) != null) {
+				
+				// se non e' il primo stato che leggo
+				if (reading) {
+					if (line.contains("(") && line.contains(")")){
+						states.add(line);
+					} else {
+						reading = false;
+					}
+				}
+				
+				// se e' il primo stato che leggo
+				if (line.contains("(") && line.contains(")") && !reading){
+					reading = true;
+					states = null;
+					states = new ArrayList<String>();	
+					states.add(line);
+				} 				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	
+	    sanitizeStates(states);
 	}
 	
 	
+	/**
+	 * pulisce le righe che dovrebbero contenere delle azioni
+	 * @param states
+	 */
+	private void sanitizeStates(List<String> states) {
+		for(String state : states){
+			int open = state.lastIndexOf("(") + 1;
+			int close = state.indexOf(")");
+			if (open < close) {
+				states_list.add("(" + state.substring(open, close) + ")");
+			} else {
+				System.err.println("non sono riuscito a trovare degli stati dal file output");
+				System.exit(-11);
+			}
+		}
+	}
+
+	
+	/**
+	 * 
+	 * @param output_path
+	 * @return
+	 */
+	private String parseOutputPath(String output_path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	private List<String> collectActions(String domain_path) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	/**
 	 * get states
 	 * @return
@@ -82,53 +114,5 @@ public class OutputSanitizer {
 	}
 		
 	
-
-	/**
-	 * export states
-	 * @param states
-	 */
-	private void export_states(String[] states) {		
-		for (int i = 0; i < states.length; i++) {
-			if (states[i] != null) {
-				if ((states[i].contains(";")) && this.planner == "sing") { 		// exception for singularity planner
-				} else {
-					this.states_list.add(states[i]);
-				}
-			}
-		}
-	}
-
-
-
-	
-	/** find the characters that should open and close the file
-	 * 
-	 * @param planner
-	 * @return
-	 */
-	private List<String> manage_planner() {
-		planner = planner.toLowerCase();
-		List<String>  res = new ArrayList<String>();
-		
-		switch (planner) {
-		case "strips":
-			res.add("(");
-			res.add(")");
-			break;
-		case "blackbox":
-			res.add("(");
-			res.add(")");
-			break;
-		case "sing":
-			res.add("");
-			res.add(";");
-			break;				
-		default:
-			System.err.println("planner not supported, "
-					+ "will be used the standard syntax to retrive the output -> (move a b c) ");
-			break;
-		}
-		return res;
-	}
 
 }

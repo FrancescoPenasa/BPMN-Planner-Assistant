@@ -2,14 +2,20 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
+import org.eclipse.bpmn2.Activity;
+import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.core.runtime.CoreException;
@@ -21,7 +27,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 public class Test {
 
 	public static void main(String[] args) throws CoreException {
-		File file = new File("/home/lithium/dev/eclipse-workspace/bpmnCollection/test.bpmn2");
+		File file = new File("/home/lithium/dev/eclipse-workspace/bpmnCollection/simple.bpmn2");
 		// Create a resource set.
 		ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -48,9 +54,10 @@ public class Test {
 				break;
 			}
 		}
-
+		
+		Definitions def = null;
 		if (doc != null) {
-			Definitions def = doc.getDefinitions();
+			def = doc.getDefinitions();
 			for (RootElement re : def.getRootElements()) {
 				
 				if (re instanceof Process) {
@@ -66,6 +73,35 @@ public class Test {
 			}
 		}
 		
-	}
+		
+		for (RootElement p : def.getRootElements()) {
+			if (p instanceof Process) {
+				for(FlowElement fe : ((Process)p).getFlowElements()) {
+					// trovato il task da cui aggiungere modifiche
+					if (fe.getId().equals("Task_1")) {
+						System.out.println("vala mona");
+						
+						Task from = (Task) fe;
+						Task task_to_add = Bpmn2Factory.eINSTANCE.createTask();
+						
+						from.setName("nuovo Task 2");
 
+						task_to_add.setId("Task_7");
+						task_to_add.setName("task aggiunto");
+						
+						
+						// cambia i sequenceFlow in uscita da from per farli andare in task
+						for (SequenceFlow sf : from.getOutgoing()) {						
+							if (sf.getTargetRef() instanceof FlowElement) {
+								sf.setTargetRef(task_to_add);
+							}
+						}
+						
+					}
+				}
+			}
+			
+		}
+		
+	}
 }

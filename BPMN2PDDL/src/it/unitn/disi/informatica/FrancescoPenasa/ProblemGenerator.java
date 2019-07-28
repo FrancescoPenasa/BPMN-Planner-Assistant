@@ -218,23 +218,16 @@ class ProblemGenerator {
 	private void writeMetric(String maximize, String minimize) throws IOException {
 		writer.write("\t(:metric \n");
 		
-		String [] maximize_constraints = maximize.split("\\)");
-		String [] minimize_constraints = minimize.split("\\)");
-		
-		if (maximize.length() > 1) {
-			writer.write("\t\tmaximize ");
-			for (int i = 0; i < maximize_constraints.length; i++) {
-				int index = maximize_constraints[i].indexOf("(");
-				writer.write("(" + maximize_constraints[i].substring(index+1) + ")\n");
-			}
+
+		if (minimize.length() > 1) {
+			writer.write("\t\tmaximize ");	
+			writer.write(maximize + "\n");
 		}
+			
 		
 		if (minimize.length() > 1) {
-			writer.write("\t\tminimize ");
-			for (int i = 0; i < minimize_constraints.length; i++) {
-				int index = minimize_constraints[i].indexOf("(");
-				writer.write( "(" + minimize_constraints[i].substring(index+1) + ")\n");
-			}
+			writer.write("\t\tminimize ");			
+			writer.write(minimize + "\n");
 		}
 		
 		writer.write("\t)\n");		

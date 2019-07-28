@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="/tmp/mozilla_lithium0/shop2-2.8.0"/>
 		<item value="/home/lithium/dev/eclipse-workspace"/>
 		<item value="/home/francesco/dev/eclipse-workspace"/>
 	</list>

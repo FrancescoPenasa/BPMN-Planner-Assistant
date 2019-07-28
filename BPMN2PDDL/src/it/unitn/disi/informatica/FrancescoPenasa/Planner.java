@@ -23,25 +23,24 @@ public class Planner {
 	private String outputPath = "";
 
 	/**
-	 * vado a capire il planner utilizzato, in base al tipo di planner posso descrivere come andrà fatta la chiamata.
-	 * chiama il planner con i parametri giusti
-	 * @param plannerPath
+	 * genero un file di output nello stesso path del file problema
+	 * chiamo il planner con i parametri specificati nell input sostituendo a domain e prob i path veri
+	 * @param planner
 	 * @param domainPath
 	 * @param problemPath
 	 * @param outputPath
-	 * @param planner
 	 */
-	public Planner(String plannerPath, String domainPath, String problemPath, String planner) {
-		List<String> argv = manage_planner(planner);
+	public Planner(String planner, String domainPath, String problemPath) {
 		this.outputPath = problemPath.replaceFirst(".", "_") + "_output.txt";
 		File file = new File(this.outputPath);
 		this.outputPath = file.getAbsolutePath();
 		
+		planner = planner.replace("domain0", domainPath);
+		planner = planner.replace("prob0", problemPath);
+		planner = planner.replace("output0", this.outputPath);
+		
 		String response = "";
-		String command = plannerPath + " "
-				+ argv.get(0) + " " + domainPath + " "
-				+ argv.get(1) + " " + problemPath + " "
-				+ argv.get(2) + " " + this.outputPath + " ";
+		String command = planner;
 		boolean waitForResponse = true;
 		
 		System.out.println("Linux command: " + command);
@@ -77,34 +76,6 @@ public class Planner {
 		System.out.println("Planner closed, result in --> " + outputPath);
 	}
 	
-	
-
-	/**
-	 * take the planner name and returns the parameters used to call the planner
-	 * @param planner
-	 * @return
-	 */
-	private List<String> manage_planner(String planner) {
-		planner = planner.toLowerCase();
-		List<String> argv = new ArrayList<String>();
-		
-		switch (planner) {
-		case "strips":
-		case "blackbox":
-			argv.add("-o");
-			argv.add("-f");
-			argv.add("-g");
-			break;
-		default:
-			argv.add(" ");
-			argv.add(" ");
-			argv.add(" ");
-			break;
-		}
-		return argv;
-	}
-
-
 
 	/*
 	 * To convert the InputStream to String we use the Reader.read(char[]
@@ -113,7 +84,6 @@ public class Planner {
 	 * produce the string.
 	 */
 	public static String convertStreamToStr(InputStream is) throws IOException {
-
 		if (is != null) {
 			Writer writer = new StringWriter();
 

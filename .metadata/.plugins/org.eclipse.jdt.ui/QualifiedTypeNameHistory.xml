@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Gateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.InclusiveGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.ExclusiveGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.ParallelGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.StartEvent"/>
     <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.InputManager"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="java.lang.ProcessBuilder.Redirect"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="java.io.IOException"/>
@@ -14,10 +12,39 @@
     <fullyQualifiedTypeName name="java.io.Writer"/>
     <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
     <fullyQualifiedTypeName name="java.io.Reader"/>
-    <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="java.io.StringWriter"/>
     <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="org.eclipse.core.internal.resources.File"/>
+    <fullyQualifiedTypeName name="org.eclipse.core.internal.utils.FileUtil"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.FileUtils"/>
+    <fullyQualifiedTypeName name="java.nio.file.CopyOption"/>
+    <fullyQualifiedTypeName name="java.nio.file.StandardCopyOption"/>
+    <fullyQualifiedTypeName name="java.nio.file.Path"/>
+    <fullyQualifiedTypeName name="java.nio.file.Paths"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowElement"/>
+    <fullyQualifiedTypeName name="java.io.FileWriter"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Event"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Task"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Definitions"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Collaboration"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Activity"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Gateway"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.ChoreographyActivity"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.DataAssociation"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.DataObject"/>
+    <fullyQualifiedTypeName name="java.lang.Enum"/>
+    <fullyQualifiedTypeName name="java.lang.StrictMath"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.SequenceFlow"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.LaneSet"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Bpmn2Factory"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.ui.diagram.Bpmn2DiagramTypeProvider"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BPMNDiagram"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BPMNPlane"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BPMNShape"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowNode"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="java.io.FileReader"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>
