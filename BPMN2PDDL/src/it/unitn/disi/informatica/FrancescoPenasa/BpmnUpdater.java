@@ -158,7 +158,7 @@ public class BpmnUpdater {
 		
 		// add all the saved outgoings to the last state
 		Task last_state = new_states.get(new_states.size() - 1);
-		if (task_id_to != null) {
+		if (task_id_to == null) {
 			for (SequenceFlow outgoing : outgoings) {
 				outgoing.setSourceRef(last_state);
 			}

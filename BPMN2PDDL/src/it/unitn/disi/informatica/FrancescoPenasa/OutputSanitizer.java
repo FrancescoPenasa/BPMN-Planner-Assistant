@@ -34,7 +34,7 @@ public class OutputSanitizer {
 		// TODO List<String> actions = collectActions(domain_path);
 		
 		// verifica quanti output ci sono --> soluzione per il fatto che alcuni planner producono pi\ output
-		output_path = parseOutputPath(output_path);
+		//output_path = parseOutputPath(output_path);
  
 		
 		List<String> states = null;
@@ -111,6 +111,12 @@ public class OutputSanitizer {
 	 */
 	public List<String> getStates() {
 		return this.states_list;
+	}
+
+
+	public String getMetrics() {
+		
+		return null;
 	}
 		
 	
