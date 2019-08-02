@@ -3,23 +3,6 @@ package it.unitn.disi.informatica.FrancescoPenasa;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-
-import org.eclipse.bpmn2.Collaboration;
-import org.eclipse.bpmn2.EndEvent;
-import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.Gateway;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LaneSet;
-import org.eclipse.bpmn2.MessageFlow;
-import org.eclipse.bpmn2.ParallelGateway;
-import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.Task;
 
 class ProblemGenerator {
 	

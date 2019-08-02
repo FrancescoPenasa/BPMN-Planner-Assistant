@@ -19,14 +19,10 @@ import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.Relationship;
 import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -45,12 +41,7 @@ public class Bpmn2Java {
 	private static Resource resource;
 	
 	/** does everything that is needed to import a bpmn2 file in java **/
-	public Bpmn2Java (String URL){		
-		// all the messy stuff that need to be done
-		init(URL);
-		
-		//testing();
-		
+	public Bpmn2Java (){		
 		System.out.println("BPMN2 to JAVA finished!");
 	}
 	
@@ -58,7 +49,7 @@ public class Bpmn2Java {
 	 * tuta sta roba da fare
 	 * @param URL
 	 */
-	private void init(String URL) {
+	public void init(String URL) {
 		File file = new File(URL);
 		
 		// Create a resource set.

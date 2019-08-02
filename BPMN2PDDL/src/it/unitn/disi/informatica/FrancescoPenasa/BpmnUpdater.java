@@ -3,69 +3,25 @@
  */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.eclipse.bpmn2.Activity;
-import org.eclipse.bpmn2.Auditing;
-import org.eclipse.bpmn2.BoundaryEvent;
 import org.eclipse.bpmn2.Bpmn2Factory;
-import org.eclipse.bpmn2.Bpmn2Package;
-import org.eclipse.bpmn2.CategoryValue;
-import org.eclipse.bpmn2.ChoreographyActivity;
-import org.eclipse.bpmn2.Collaboration;
-import org.eclipse.bpmn2.ConversationLink;
-import org.eclipse.bpmn2.DataAssociation;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataOutputAssociation;
 import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.DocumentRoot;
-import org.eclipse.bpmn2.Documentation;
-import org.eclipse.bpmn2.Event;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.ExtensionDefinition;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowNode;
-import org.eclipse.bpmn2.Gateway;
-import org.eclipse.bpmn2.InputOutputSpecification;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LaneSet;
-import org.eclipse.bpmn2.LoopCharacteristics;
-import org.eclipse.bpmn2.Monitoring;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.Property;
-import org.eclipse.bpmn2.Relationship;
-import org.eclipse.bpmn2.ResourceRole;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNPlane;
-import org.eclipse.bpmn2.di.BPMNShape;
-import org.eclipse.bpmn2.modeler.ui.diagram.Bpmn2DiagramTypeProvider;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.util.FeatureMap;
 
 /**
  * @author lithium
