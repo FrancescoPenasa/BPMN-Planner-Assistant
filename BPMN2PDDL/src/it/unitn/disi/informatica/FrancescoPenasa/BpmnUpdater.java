@@ -14,8 +14,11 @@ import java.util.List;
 
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowNode;
+import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SequenceFlow;
@@ -41,14 +44,147 @@ public class BpmnUpdater {
 	 * @param lis contiene i nuovi stati
 	 * @param bpmn
 	 * @param url
-	 * @param task_id_from
-	 * @param task_id_to
+	 * @param from_elem
+	 * @param to_elem
 	 */
-	public BpmnUpdater(List<String> lis, Bpmn2Java bpmn, String url, String task_id_from, String task_id_to) {
+	public BpmnUpdater(List<List<List<String>>> plans, Bpmn2Java bpmn, String from_elem, String to_elem) {
+		List<FlowNode> new_elements = new ArrayList<FlowNode>();
+		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
+		FlowNode from;
+		FlowNode to;
+		SequenceFlow sf;
 		
-		createBPMNBackup(url);
+		// no exclusiveGateway
+		if (plans.size() == 1) {
+			List<List<String>> times = plans.get(0);
+			for (List<String> states : times) {
+				
+				
+				if (states.size() == 1) {
+					Task t = Bpmn2Factory.eINSTANCE.createTask();
+					t.setName(states.get(0));
+					new_elements.add(t);
+					
+					sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+					sf.setSourceRef(from);
+					sf.setTargetRef(t);
+					new_links.add(sf);
+					
+					sf = null;
+					from = null;
+					from = t;
+										
+				} else {
+					// where starts parallel
+					ParallelGateway pre_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
+					new_elements.add(pre_pg);
+					
+					sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+					sf.setSourceRef(from);
+					sf.setTargetRef(pre_pg);
+					new_links.add(sf);					
+					sf = null;
+					
+					// where end parallel
+					ParallelGateway post_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
+					new_elements.add(post_pg);
+					from = null;
+					from = post_pg;
+					
+					for (String state : states) {
+						Task t = Bpmn2Factory.eINSTANCE.createTask();
+						t.setName(state);
+						new_elements.add(t);
+						
+						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+						sf.setSourceRef(pre_pg);
+						sf.setTargetRef(t);
+						new_links.add(sf);
+						sf = null;
+												
+						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+						sf.setSourceRef(t);
+						sf.setTargetRef(post_pg);
+						new_links.add(sf);
+						sf = null;
+					}
+				}
+			}
+		} else {
+			ExclusiveGateway eg = Bpmn2Factory.eINSTANCE.createExclusiveGateway();
+			new_elements.add(eg);
+			
+			sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+			sf.setSourceRef(from);
+			sf.setTargetRef(eg);
+			new_links.add(sf);					
+			sf = null;
+			
+			sf = null;
+			from = null;			
+			for (List<List<String>> plan : plans) {
+				from = eg;
+				
+				List<List<String>> times = plan;
+				for (List<String> states : times) {
+					
+					
+					if (states.size() == 1) {
+						Task t = Bpmn2Factory.eINSTANCE.createTask();
+						t.setName(states.get(0));
+						new_elements.add(t);
+						
+						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+						sf.setSourceRef(from);
+						sf.setTargetRef(t);
+						new_links.add(sf);
+						
+						sf = null;
+						from = null;
+						from = t;
+											
+					} else {
+						// where starts parallel
+						ParallelGateway pre_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
+						new_elements.add(pre_pg);
+						
+						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+						sf.setSourceRef(from);
+						sf.setTargetRef(pre_pg);
+						new_links.add(sf);					
+						sf = null;
+						
+						// where end parallel
+						ParallelGateway post_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
+						new_elements.add(post_pg);
+						from = null;
+						from = post_pg;
+						
+						for (String state : states) {
+							Task t = Bpmn2Factory.eINSTANCE.createTask();
+							t.setName(state);
+							new_elements.add(t);
+							
+							sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+							sf.setSourceRef(pre_pg);
+							sf.setTargetRef(t);
+							new_links.add(sf);
+							sf = null;
+													
+							sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+							sf.setSourceRef(t);
+							sf.setTargetRef(post_pg);
+							new_links.add(sf);
+							sf = null;
+						}
+					}
+			}
+		}
+		
+		
 			
 		Definitions def = Bpmn2Java.getDef();
+		
 		
 		// Create all the new states and put them in a ordered list
 		List<Task> new_states = new ArrayList<Task>();
@@ -74,7 +210,7 @@ public class BpmnUpdater {
 				for(FlowElement fe : p.getFlowElements()) {
 					
 					// se il flowelement e' quello da cui voglio partire per i nuovi stati
-					if (fe.getId().equals(task_id_from)) {
+					if (fe.getId().equals(from_elem)) {
 						fe.setName(fe.getName() + " interrupted");
 						
 						if (fe instanceof FlowNode) {
@@ -83,13 +219,13 @@ public class BpmnUpdater {
 							sf.setSourceRef(fn);
 							sf.setTargetRef(new_states.get(0));
 						} else {
-							System.err.println(task_id_from + " is not an Activity or Event or Gateway, it cannot be a \"state\".");
+							System.err.println(from_elem + " is not an Activity or Event or Gateway, it cannot be a \"state\".");
 							System.exit(-10); // TODO  ENUM
 						}											
 					}
 					
 					// se il flowelement e' quello in cui voglio arrivare con i nuovi stati
-					if (fe.getId().equals(task_id_to)) {
+					if (fe.getId().equals(to_elem)) {
 						out = (FlowNode) fe;
 					}
 				}
@@ -114,7 +250,7 @@ public class BpmnUpdater {
 		
 		// add all the saved outgoings to the last state
 		Task last_state = new_states.get(new_states.size() - 1);
-		if (task_id_to == null) {
+		if (to_elem == null) {
 			for (SequenceFlow outgoing : outgoings) {
 				outgoing.setSourceRef(last_state);
 			}
@@ -154,30 +290,6 @@ public class BpmnUpdater {
 	}
 
 
-	/**
-	 * Crea un backup del file bpmn2 nella stessa cartella in cui 
-	 * e' presente il file originale.
-	 * @param source url del file 
-	 */
-	private void createBPMNBackup(String source) {
-		String dst = source.replaceAll(".bpmn2", "_original.bpmn2");
-		
-		Path FROM = Paths.get(source);
-        Path TO = Paths.get(dst);
-        
-        // overwrite the destination file if it exists, and copy
-        // the file attributes, including the rwx permissions
-        CopyOption[] options = new CopyOption[]{
-          StandardCopyOption.REPLACE_EXISTING,
-          StandardCopyOption.COPY_ATTRIBUTES
-        }; 
-        
-		try {
-			Files.copy(FROM, TO, options);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}    
-	}
+	
 
 }

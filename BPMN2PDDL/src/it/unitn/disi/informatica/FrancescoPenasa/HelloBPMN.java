@@ -30,12 +30,12 @@ public class HelloBPMN {
 	
 	private static String planner_url = "";
 	
-	private static String from_state_id = "";
+	private static String from = "";
 	
 	// optional input parameters
 	private static String problem_max_conditions = "";
 	private static String problem_min_conditions = "";
-	private static String to_state_id = null;
+	private static String to = null;
 	
 	public static boolean metrics_usage = false;
 	public static String limitator = "parenthesis";
@@ -90,12 +90,12 @@ public class HelloBPMN {
 				
 			case "-f":	
 			case "--from":
-				from_state_id = args[++i];
+				from = args[++i];
 				break;	
 
 			case "-t":	
 			case "--to":
-				to_state_id = args[++i];
+				to = args[++i];
 				break;
 			
 			case "-h":
@@ -122,7 +122,7 @@ public class HelloBPMN {
 	private static void check_mandatory_input() {
 		if (bpmn_url.isEmpty() || domain_url.isEmpty()
 				|| problem_goal.isEmpty() || problem_init.isEmpty() || problem_obj.isEmpty()
-				|| planner_url.isEmpty()  || from_state_id.isEmpty()) {
+				|| planner_url.isEmpty()  || from.isEmpty()) {
 			System.err.println("wrong usage, use java bpmnpddl --help to see the correct usage");
 		}
 	}
@@ -170,57 +170,68 @@ public class HelloBPMN {
 	 */
 	public static void main(String[] args) {
 			
-		/* manage input */
-		input_manager(args);
-		
-		/* get domain name */ 
-		domain_name = get_domain_name(domain_url);
-		
-		/* extract bpmn */
+//		/* manage input */
+//		input_manager(args);
+//		
+//		/* get domain name */ 
+//		domain_name = get_domain_name(domain_url);
+//		
+//		/* extract bpmn */
 		Bpmn2Java bpmn = new Bpmn2Java();
 		bpmn.init(bpmn_url);
+//		
+//		/* generate problem */ 
+//		ProblemGenerator pr = null;
+//		if (problem_max_conditions.length() == 0 && problem_min_conditions.length() == 0) {
+//			try {
+//				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		else {
+//			try {
+//				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal, problem_max_conditions, problem_min_conditions);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
+//		}
+//		String problem_url = pr.getUrl();
+//		
+//		/* execute the planner on the domain and problem file and create an output file */
+//		Planner planner = new Planner(planner_url, domain_url, problem_url);
+//		String output_url = planner.getOutputURL();
 		
-		/* generate problem */ 
-		ProblemGenerator pr = null;
-		if (problem_max_conditions.length() == 0 && problem_min_conditions.length() == 0) {
-			try {
-				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else {
-			try {
-				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal, problem_max_conditions, problem_min_conditions);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-		}
-		String problem_url = pr.getUrl();
 		
-		/* execute the planner on the domain and problem file and create an output file */
-		Planner planner = new Planner(planner_url, domain_url, problem_url);
-		String output_url = planner.getOutputURL();
-				
+		
+		
+		// TEST
+		String output_url = "/home/lithium/benchmark/outputsanitize/out";
+		
 		/* sanitize output file from unwanted data */ 
-		OutputSanitizer ov = new OutputSanitizer (output_url, domain_url);
-		List<String> new_states = ov.getStates();
-		String metrics = ov.getMetrics();
+		OutputSanitizer ov = new OutputSanitizer (output_url);
+		List<List<List<String>>> plans = ov.getPlans();
+		String metrics = ov.getMetrics();		
+		
 		
 		/* creo un nuovo bpmn2 con i nuovi stati */
-		BpmnUpdater bu = new BpmnUpdater(new_states, bpmn, bpmn_url, from_state_id, to_state_id);			
-		
-		
-		/* print */ 
-		System.out.println("finito");
-		System.out.println("piano completato con " + new_states.size() + " stati.");
-		if (metrics != null) {
-			System.out.println("cost totale " + metrics + ".");
-		}
-		System.out.println("aggiunt " + new_states.size() + " task a bpmn.");	
+		MyFile.createBackup(bpmn_url);
+		BpmnUpdater bu = new BpmnUpdater(plans, bpmn, from, to);			
+//		
+//		
+//		/* print */ 
+//		System.out.println("finito");
+//		System.out.println("piano completato con " + new_states.size() + " stati.");
+//		if (metrics != null) {
+//			System.out.println("cost totale " + metrics + ".");
+//		}
+//		System.out.println("aggiunt " + new_states.size() + " task a bpmn.");	
 	}
+	
+	
+	
 	
 	private static String get_domain_name(String url) {
 		String domain = null;

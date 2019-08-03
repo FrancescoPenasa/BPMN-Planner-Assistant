@@ -29,8 +29,7 @@ public class Planner {
 	 * @param outputPath
 	 */
 	public Planner(String planner, String domainPath, String problemPath) {
-		this.outputPath = problemPath.replace(".pddl", "_output.txt");
-		System.err.println(outputPath);
+		this.outputPath = problemPath.replace(".pddl", "_output");
 		File file = new File(this.outputPath);
 		this.outputPath = file.getAbsolutePath();
 		
@@ -106,7 +105,6 @@ public class Planner {
 
 
 	public String getOutputURL() {
-		
 		return this.outputPath;
 	}
 
