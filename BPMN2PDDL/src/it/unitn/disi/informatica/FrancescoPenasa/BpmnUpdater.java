@@ -11,7 +11,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.ExclusiveGateway;
@@ -24,7 +26,13 @@ import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.di.BPMNDiagram;
+import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.bpmn2.di.BPMNShape;
+import org.eclipse.bpmn2.di.BpmnDiFactory;
+import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.dd.di.Plane;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 
 /**
  * @author lithium
@@ -32,76 +40,102 @@ import org.eclipse.bpmn2.di.BPMNPlane;
  */
 public class BpmnUpdater {
 
-	//final public Enum<String> ERROR = "-10"; // TO TRANSFORM IN ENUM
-	
+	Definitions def = null;
+
 	/**
-	 * prende gli elementi presenti in lis, li fa diventare dei task li collega in successione
-	 * al task che corrisponde a task_id_from, 
-	 * SE task_id_to != null l'ultimo dei nuovi task va a finire nel
-	 * 	FlowNode che ha come id task_id_to e cancella tutti i flowelement outgoings originali di task_id_from 
-	 * ALTRIMENTI salva tutti gli outgoings originale del task task_id_from e ne sostituisce il sourceref con l'ultimo
-	 *   dei nuovi task.
-	 * @param lis contiene i nuovi stati
+	 * prende gli elementi presenti in lis, li fa diventare dei task li collega in
+	 * successione al task che corrisponde a task_id_from, SE task_id_to != null
+	 * l'ultimo dei nuovi task va a finire nel FlowNode che ha come id task_id_to e
+	 * cancella tutti i flowelement outgoings originali di task_id_from ALTRIMENTI
+	 * salva tutti gli outgoings originale del task task_id_from e ne sostituisce il
+	 * sourceref con l'ultimo dei nuovi task.
+	 * 
+	 * @param lis       contiene i nuovi stati
 	 * @param bpmn
 	 * @param url
 	 * @param from_elem
 	 * @param to_elem
 	 */
 	public BpmnUpdater(List<List<List<String>>> plans, Bpmn2Java bpmn, String from_elem, String to_elem) {
+		this.def = bpmn.getDef();
+
 		List<FlowNode> new_elements = new ArrayList<FlowNode>();
 		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
-		FlowNode from;
-		FlowNode to;
-		SequenceFlow sf;
+		List<SequenceFlow> outgoings = new ArrayList<SequenceFlow>(); // collezione di sf uscenti dal nodo from
+
+		FlowNode from = getFlowNode(from_elem); // nodo iniziale
+		FlowNode to = getFlowNode(to_elem); // nodo finale
+
+		from.setName(from.getName() + " interrupted");
+		outgoings = from.getOutgoing();
 		
-		// no exclusiveGateway
-		if (plans.size() == 1) {
+		Process p = null;
+		for (RootElement re : this.def.getRootElements()) {
+			if (re instanceof Process) {	
+				p = (Process) re;
+				for (FlowElement fe : p.getFlowElements()) {
+					if (fe instanceof FlowNode) {
+						if (fe.getId().equals(from.getId())) {
+							p = (Process) re;
+						}
+					}
+				}
+			}
+		}
+		p.getFlowElements().removeAll(outgoings);
+		
+		SequenceFlow sf;
+
+		// ----------- AGGIUNTA NUOVI STATI ----------------- //
+		if (plans.size() == 1) // no exclusiveGateway
+		{
 			List<List<String>> times = plans.get(0);
 			for (List<String> states : times) {
-				
-				
-				if (states.size() == 1) {
+
+				if (states.size() == 1) // no parallelsGateway
+				{
 					Task t = Bpmn2Factory.eINSTANCE.createTask();
 					t.setName(states.get(0));
 					new_elements.add(t);
-					
+
 					sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 					sf.setSourceRef(from);
 					sf.setTargetRef(t);
 					new_links.add(sf);
-					
+
 					sf = null;
 					from = null;
 					from = t;
-										
-				} else {
-					// where starts parallel
+
+				} else // yes parallelsGateway
+				{
+
 					ParallelGateway pre_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
 					new_elements.add(pre_pg);
-					
+
 					sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 					sf.setSourceRef(from);
 					sf.setTargetRef(pre_pg);
-					new_links.add(sf);					
+					new_links.add(sf);
 					sf = null;
-					
+
 					// where end parallel
 					ParallelGateway post_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
 					new_elements.add(post_pg);
 					from = null;
 					from = post_pg;
-					
+
 					for (String state : states) {
 						Task t = Bpmn2Factory.eINSTANCE.createTask();
 						t.setName(state);
 						new_elements.add(t);
-						
+
 						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 						sf.setSourceRef(pre_pg);
 						sf.setTargetRef(t);
 						new_links.add(sf);
 						sf = null;
-												
+
 						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 						sf.setSourceRef(t);
 						sf.setTargetRef(post_pg);
@@ -110,67 +144,70 @@ public class BpmnUpdater {
 					}
 				}
 			}
-		} else {
-			ExclusiveGateway eg = Bpmn2Factory.eINSTANCE.createExclusiveGateway();
-			new_elements.add(eg);
-			
+		} else // yes exclusiveGateway
+		{
+			ExclusiveGateway eg_from = Bpmn2Factory.eINSTANCE.createExclusiveGateway();
+			new_elements.add(eg_from);
+
 			sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 			sf.setSourceRef(from);
-			sf.setTargetRef(eg);
-			new_links.add(sf);					
+			sf.setTargetRef(eg_from);
+			new_links.add(sf);
 			sf = null;
+			from = null;
 			
-			sf = null;
-			from = null;			
+			ExclusiveGateway eg_to = Bpmn2Factory.eINSTANCE.createExclusiveGateway();
+			new_elements.add(eg_to);
+	
 			for (List<List<String>> plan : plans) {
-				from = eg;
-				
+				from = eg_from;
+
 				List<List<String>> times = plan;
 				for (List<String> states : times) {
-					
-					
-					if (states.size() == 1) {
+
+					if (states.size() == 1) // no parallelsGateway
+					{
 						Task t = Bpmn2Factory.eINSTANCE.createTask();
 						t.setName(states.get(0));
 						new_elements.add(t);
-						
+
 						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 						sf.setSourceRef(from);
 						sf.setTargetRef(t);
 						new_links.add(sf);
-						
+
 						sf = null;
 						from = null;
 						from = t;
-											
-					} else {
-						// where starts parallel
+
+					} else // yes parallelsGateway
+					{
 						ParallelGateway pre_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
 						new_elements.add(pre_pg);
-						
+
 						sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 						sf.setSourceRef(from);
 						sf.setTargetRef(pre_pg);
-						new_links.add(sf);					
+						new_links.add(sf);
 						sf = null;
-						
+
 						// where end parallel
 						ParallelGateway post_pg = Bpmn2Factory.eINSTANCE.createParallelGateway();
 						new_elements.add(post_pg);
 						from = null;
 						from = post_pg;
-						
+
 						for (String state : states) {
 							Task t = Bpmn2Factory.eINSTANCE.createTask();
 							t.setName(state);
 							new_elements.add(t);
-							
+
 							sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 							sf.setSourceRef(pre_pg);
 							sf.setTargetRef(t);
 							new_links.add(sf);
 							sf = null;
-													
+
 							sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
 							sf.setSourceRef(t);
 							sf.setTargetRef(post_pg);
@@ -178,118 +215,111 @@ public class BpmnUpdater {
 							sf = null;
 						}
 					}
+				}
+				sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+				sf.setSourceRef(from);
+				sf.setTargetRef(eg_to);
+				new_links.add(sf);
+				sf = null;
+				from = eg_to;
+			}			
+		}
+			// ----------- FINE AGGIUNTA NUOVI STATI ----------------- //
+
+		
+			if (to_elem == null) {
+				for (SequenceFlow outgoing : outgoings) {
+					
+					outgoing.setSourceRef(from);					
+					new_links.add(outgoing);
+				}
+			} else {
+				SequenceFlow new_sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
+				new_sf.setSourceRef(from);
+				new_sf.setTargetRef(to);
+
+				new_links.add(new_sf);
+			}
+			
+			
+			// aggiungo i nuovi elementi
+			p.getFlowElements().addAll(new_elements);
+			p.getFlowElements().addAll(new_links);			
+
+			
+			
+			// find the plan where add the new elements
+			// and erase outgoing links from the 
+						
+			// --------------- PER MODIFICARE IL DIAGRAM --------------- //
+//			BPMNPlane plane_to_modify = null;			
+//			BPMNDiagram d_to_modify = null;			
+//			List<BPMNDiagram> diagrams = def.getDiagrams();
+//			for (BPMNDiagram d : diagrams) {				
+//				BPMNPlane plane = d.getPlane();	
+//				for (DiagramElement de : plane.getPlaneElement()) {					
+//					if (de instanceof BPMNShape) {
+//						BPMNShape bpmns = (BPMNShape) de;
+//						if (bpmns.getBpmnElement().getId().equals(from_elem)) {
+//							d_to_modify = d;
+//							plane_to_modify = plane;
+//						}
+//					}
+//					if (de instanceof BPMNEdge && to_elem != null) {
+//						BPMNEdge bpmne = (BPMNEdge) de;
+//						for (SequenceFlow outgoing : outgoings) {
+//							if (bpmne.getBpmnElement().getId().equals(outgoing.getId())) {
+//								plane.getPlaneElement().remove(de);
+//							}						
+//						}
+//					}
+//				}				
+//			}	
+//			
+//			BPMNShape shape = null;
+//			BPMNEdge edge = null;
+//			for (FlowNode elem : new_elements) {
+//				shape = BpmnDiFactory.eINSTANCE.createBPMNShape();
+//				shape.setBpmnElement(elem);		
+//				plane_to_modify.getPlaneElement().add(shape);
+//			}
+//			for (SequenceFlow link : new_links) {
+//				edge = BpmnDiFactory.eINSTANCE.createBPMNEdge();
+//				edge.setBpmnElement(link);	
+//				plane_to_modify.getPlaneElement().add(edge);
+//			}
+			// --------------- FINE PER MODIFICARE IL DIAGRAM --------------- //
+
+			def.getDiagrams().removeAll(def.getDiagrams());	
+			// devo cancellare il diagramma oggetto e poi crearne uno nuovo con tutti gli elementi che mi servono
+			// salvo i cambiamenti
+			try {
+				Bpmn2Java.getResource().save(null);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		
-		
-			
-		Definitions def = Bpmn2Java.getDef();
-		
-		
-		// Create all the new states and put them in a ordered list
-		List<Task> new_states = new ArrayList<Task>();
-		for(int i = 0; i < lis.size(); i++) {
-			Task state = Bpmn2Factory.eINSTANCE.createTask();
-			state.setName(lis.get(i));
-			new_states.add(state);
-		}
-		
+	
+
+	private FlowNode getFlowNode(String id) {
 		Process p = null;
-		FlowNode out = null;
-		
-		SequenceFlow sf = Bpmn2Factory.eINSTANCE.createSequenceFlow(); // primo SF
-		List<SequenceFlow> outgoings = new ArrayList<SequenceFlow>();  // collezione dei nuovi SF
-		
-		// find the from element, collect all his outgoings in an arraylist, 
-		// change his name to see the error, add a sequence flow from him to the first of the new states.
-		for (RootElement re : def.getRootElements()) {
-			// if there are not collaborations
+		FlowNode res = null;
+
+		for (RootElement re : this.def.getRootElements()) {
 			if (re instanceof Process) {
 				p = (Process) re;
-				// TODO support per laneset
-				for(FlowElement fe : p.getFlowElements()) {
-					
-					// se il flowelement e' quello da cui voglio partire per i nuovi stati
-					if (fe.getId().equals(from_elem)) {
-						fe.setName(fe.getName() + " interrupted");
-						
-						if (fe instanceof FlowNode) {
-							FlowNode fn = (FlowNode) fe;
-							outgoings = fn.getOutgoing();
-							sf.setSourceRef(fn);
-							sf.setTargetRef(new_states.get(0));
-						} else {
-							System.err.println(from_elem + " is not an Activity or Event or Gateway, it cannot be a \"state\".");
-							System.exit(-10); // TODO  ENUM
-						}											
-					}
-					
-					// se il flowelement e' quello in cui voglio arrivare con i nuovi stati
-					if (fe.getId().equals(to_elem)) {
-						out = (FlowNode) fe;
+				for (FlowElement fe : p.getFlowElements()) {
+					if (fe instanceof FlowNode) {
+						if (fe.getId().equals(id)) {
+							res = (FlowNode) fe;
+							return res;
+						}
 					}
 				}
 			}
 		}
-		
-		
-		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
-		new_links.add(sf);
-		
-		// generate a link between all the new states
-		for (int i = 1; i < new_states.size(); i++) {
-			Task from = new_states.get(i-1);
-			Task to = new_states.get(i);
-			
-			SequenceFlow new_link = Bpmn2Factory.eINSTANCE.createSequenceFlow();
-			new_link.setSourceRef(from);
-			new_link.setTargetRef(to);
-			
-			new_links.add(new_link);
-		}
-		
-		// add all the saved outgoings to the last state
-		Task last_state = new_states.get(new_states.size() - 1);
-		if (to_elem == null) {
-			for (SequenceFlow outgoing : outgoings) {
-				outgoing.setSourceRef(last_state);
-			}
-		} else {
-			SequenceFlow new_sf = Bpmn2Factory.eINSTANCE.createSequenceFlow();
-			new_sf.setSourceRef(last_state);
-			new_sf.setTargetRef(out);
-			
-			new_links.add(new_sf);
-		}
-		
-
-		
-		// aggiungo i nuovi elementi
-		p.getFlowElements().addAll(new_states);
-		p.getFlowElements().addAll(new_links);
-		
-		// cancello il diagramma per evitare errori
-		def.getDiagrams().removeAll(def.getDiagrams());
-		
-		// TODO test per fare aggiunte al diagramma piuttosto che cancellarlo
-		for (BPMNDiagram bp : def.getDiagrams()) {
-			BPMNPlane bplane = bp.getPlane();
-			if (bplane.getBpmnElement().equals(p.getId())) {				
-			}
-		}
-		
-		
-		
-		// salvo i cambiamenti
-		try {
-			Bpmn2Java.getResource().save(null);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return null;
 	}
-
-
-	
-
 }

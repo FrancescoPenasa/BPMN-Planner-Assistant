@@ -178,6 +178,7 @@ public class HelloBPMN {
 //		
 //		/* extract bpmn */
 		Bpmn2Java bpmn = new Bpmn2Java();
+		bpmn_url = "/home/lithium/dev/eclipse-workspace/bpmnCollection/rocket.bpmn2";
 		bpmn.init(bpmn_url);
 //		
 //		/* generate problem */ 
@@ -209,6 +210,8 @@ public class HelloBPMN {
 		
 		// TEST
 		String output_url = "/home/lithium/benchmark/outputsanitize/out";
+		from = "Task_1";
+		to = null;
 		
 		/* sanitize output file from unwanted data */ 
 		OutputSanitizer ov = new OutputSanitizer (output_url);

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- origin at X=0.0 Y=0.0 -->
-<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="_VWo_oLITEemC8Y7X6Oe6xg" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.4.3.Final-v20180418-1358-B1">
-  <bpmn2:process id="Process_1" name="Process 1" isExecutable="false">
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="_VWo_oLITEemC8Y7X6Oe6xg" exporter="org.eclipse.bpmn2.modeler.core" exporterVersion="1.4.3.Final-v20180418-1358-B1">
+  <bpmn2:process id="Process_1" name="Process 1">
     <bpmn2:startEvent id="StartEvent_1" name="Start Event 1">
       <bpmn2:outgoing>SequenceFlow_1</bpmn2:outgoing>
     </bpmn2:startEvent>
     <bpmn2:endEvent id="EndEvent_1" name="End Event 1">
       <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
     </bpmn2:endEvent>
-    <bpmn2:task id="Task_1" name="Task 1">
+    <bpmn2:task id="Task_1" name="Task 1 interrupted">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
-      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_joLecEemj_o0bRJUDkQ</bpmn2:outgoing>
     </bpmn2:task>
     <bpmn2:task id="Task_2" name="Task 2">
       <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
@@ -21,69 +21,173 @@
       <bpmn2:outgoing>SequenceFlow_4</bpmn2:outgoing>
     </bpmn2:task>
     <bpmn2:sequenceFlow id="SequenceFlow_1" sourceRef="StartEvent_1" targetRef="Task_1"/>
-    <bpmn2:sequenceFlow id="SequenceFlow_2" sourceRef="Task_1" targetRef="Task_2"/>
     <bpmn2:sequenceFlow id="SequenceFlow_3" sourceRef="Task_2" targetRef="Task_3"/>
     <bpmn2:sequenceFlow id="SequenceFlow_4" sourceRef="Task_3" targetRef="EndEvent_1"/>
+    <bpmn2:exclusiveGateway id="_Dc_jobecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_joLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jorecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jo7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jpLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:exclusiveGateway id="_Dc_jpbecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jprecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jp7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jqLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:parallelGateway id="_Dc_jqbecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jorecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jqrecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jq7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jrLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jrbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:parallelGateway id="_Dc_jrrecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jr7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jsLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jsbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jsrecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_js7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:task id="_Dc_jtLecEemj_o0bRJUDkQ" name="first">
+      <bpmn2:incoming>_Dc_jqrecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jr7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_Dc_jtbecEemj_o0bRJUDkQ" name="11111">
+      <bpmn2:incoming>_Dc_jq7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jsLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_Dc_jtrecEemj_o0bRJUDkQ" name="!!!!!">
+      <bpmn2:incoming>_Dc_jrLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jsbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_Dc_jt7ecEemj_o0bRJUDkQ" name="~~~~~">
+      <bpmn2:incoming>_Dc_jrbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jsrecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_Dc_juLecEemj_o0bRJUDkQ" name="secondo">
+      <bpmn2:incoming>_Dc_js7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jubecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:parallelGateway id="_Dc_jurecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jubecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_ju7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jvLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_Dc_jvbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:parallelGateway id="_Dc_jvrecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jv7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jwLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_Dc_jwbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jprecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:task id="_DdAKsLecEemj_o0bRJUDkQ" name="terzo">
+      <bpmn2:incoming>_Dc_ju7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jv7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKsbecEemj_o0bRJUDkQ" name="terzo2">
+      <bpmn2:incoming>_Dc_jvLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jwLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKsrecEemj_o0bRJUDkQ" name="terzo3">
+      <bpmn2:incoming>_Dc_jvbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jwbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:parallelGateway id="_DdAKs7ecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_Dc_jo7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKtLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_DdAKtbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:parallelGateway id="_DdAKtrecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_DdAKt7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_DdAKuLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKubecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:task id="_DdAKurecEemj_o0bRJUDkQ" name="first">
+      <bpmn2:incoming>_DdAKtLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKt7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKu7ecEemj_o0bRJUDkQ" name="11111">
+      <bpmn2:incoming>_DdAKtbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKuLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKvLecEemj_o0bRJUDkQ" name="123123">
+      <bpmn2:incoming>_DdAKubecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKvbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:parallelGateway id="_DdAKvrecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_DdAKvbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKv7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_DdAKwLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+      <bpmn2:outgoing>_DdAKwbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:parallelGateway id="_DdAKwrecEemj_o0bRJUDkQ">
+      <bpmn2:incoming>_DdAKw7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_DdAKxLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:incoming>_DdAKxbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jp7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+    <bpmn2:task id="_DdAKxrecEemj_o0bRJUDkQ" name="terzo">
+      <bpmn2:incoming>_DdAKv7ecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKw7ecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKx7ecEemj_o0bRJUDkQ" name="terzo2">
+      <bpmn2:incoming>_DdAKwLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKxLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKyLecEemj_o0bRJUDkQ" name="terzo3">
+      <bpmn2:incoming>_DdAKwbecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKxbecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKybecEemj_o0bRJUDkQ" name="first">
+      <bpmn2:incoming>_Dc_jpLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKyrecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKy7ecEemj_o0bRJUDkQ" name="secondo">
+      <bpmn2:incoming>_DdAKyrecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_DdAKzLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_DdAKzbecEemj_o0bRJUDkQ" name="terzo3">
+      <bpmn2:incoming>_DdAKzLecEemj_o0bRJUDkQ</bpmn2:incoming>
+      <bpmn2:outgoing>_Dc_jqLecEemj_o0bRJUDkQ</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:sequenceFlow id="_Dc_joLecEemj_o0bRJUDkQ" sourceRef="Task_1" targetRef="_Dc_jobecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jorecEemj_o0bRJUDkQ" sourceRef="_Dc_jobecEemj_o0bRJUDkQ" targetRef="_Dc_jqbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jqrecEemj_o0bRJUDkQ" sourceRef="_Dc_jqbecEemj_o0bRJUDkQ" targetRef="_Dc_jtLecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jr7ecEemj_o0bRJUDkQ" sourceRef="_Dc_jtLecEemj_o0bRJUDkQ" targetRef="_Dc_jrrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jq7ecEemj_o0bRJUDkQ" sourceRef="_Dc_jqbecEemj_o0bRJUDkQ" targetRef="_Dc_jtbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jsLecEemj_o0bRJUDkQ" sourceRef="_Dc_jtbecEemj_o0bRJUDkQ" targetRef="_Dc_jrrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jrLecEemj_o0bRJUDkQ" sourceRef="_Dc_jqbecEemj_o0bRJUDkQ" targetRef="_Dc_jtrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jsbecEemj_o0bRJUDkQ" sourceRef="_Dc_jtrecEemj_o0bRJUDkQ" targetRef="_Dc_jrrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jrbecEemj_o0bRJUDkQ" sourceRef="_Dc_jqbecEemj_o0bRJUDkQ" targetRef="_Dc_jt7ecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jsrecEemj_o0bRJUDkQ" sourceRef="_Dc_jt7ecEemj_o0bRJUDkQ" targetRef="_Dc_jrrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_js7ecEemj_o0bRJUDkQ" sourceRef="_Dc_jrrecEemj_o0bRJUDkQ" targetRef="_Dc_juLecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jubecEemj_o0bRJUDkQ" sourceRef="_Dc_juLecEemj_o0bRJUDkQ" targetRef="_Dc_jurecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_ju7ecEemj_o0bRJUDkQ" sourceRef="_Dc_jurecEemj_o0bRJUDkQ" targetRef="_DdAKsLecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jv7ecEemj_o0bRJUDkQ" sourceRef="_DdAKsLecEemj_o0bRJUDkQ" targetRef="_Dc_jvrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jvLecEemj_o0bRJUDkQ" sourceRef="_Dc_jurecEemj_o0bRJUDkQ" targetRef="_DdAKsbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jwLecEemj_o0bRJUDkQ" sourceRef="_DdAKsbecEemj_o0bRJUDkQ" targetRef="_Dc_jvrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jvbecEemj_o0bRJUDkQ" sourceRef="_Dc_jurecEemj_o0bRJUDkQ" targetRef="_DdAKsrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jwbecEemj_o0bRJUDkQ" sourceRef="_DdAKsrecEemj_o0bRJUDkQ" targetRef="_Dc_jvrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jprecEemj_o0bRJUDkQ" sourceRef="_Dc_jvrecEemj_o0bRJUDkQ" targetRef="_Dc_jpbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jo7ecEemj_o0bRJUDkQ" sourceRef="_Dc_jobecEemj_o0bRJUDkQ" targetRef="_DdAKs7ecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKtLecEemj_o0bRJUDkQ" sourceRef="_DdAKs7ecEemj_o0bRJUDkQ" targetRef="_DdAKurecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKt7ecEemj_o0bRJUDkQ" sourceRef="_DdAKurecEemj_o0bRJUDkQ" targetRef="_DdAKtrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKtbecEemj_o0bRJUDkQ" sourceRef="_DdAKs7ecEemj_o0bRJUDkQ" targetRef="_DdAKu7ecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKuLecEemj_o0bRJUDkQ" sourceRef="_DdAKu7ecEemj_o0bRJUDkQ" targetRef="_DdAKtrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKubecEemj_o0bRJUDkQ" sourceRef="_DdAKtrecEemj_o0bRJUDkQ" targetRef="_DdAKvLecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKvbecEemj_o0bRJUDkQ" sourceRef="_DdAKvLecEemj_o0bRJUDkQ" targetRef="_DdAKvrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKv7ecEemj_o0bRJUDkQ" sourceRef="_DdAKvrecEemj_o0bRJUDkQ" targetRef="_DdAKxrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKw7ecEemj_o0bRJUDkQ" sourceRef="_DdAKxrecEemj_o0bRJUDkQ" targetRef="_DdAKwrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKwLecEemj_o0bRJUDkQ" sourceRef="_DdAKvrecEemj_o0bRJUDkQ" targetRef="_DdAKx7ecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKxLecEemj_o0bRJUDkQ" sourceRef="_DdAKx7ecEemj_o0bRJUDkQ" targetRef="_DdAKwrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKwbecEemj_o0bRJUDkQ" sourceRef="_DdAKvrecEemj_o0bRJUDkQ" targetRef="_DdAKyLecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKxbecEemj_o0bRJUDkQ" sourceRef="_DdAKyLecEemj_o0bRJUDkQ" targetRef="_DdAKwrecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jp7ecEemj_o0bRJUDkQ" sourceRef="_DdAKwrecEemj_o0bRJUDkQ" targetRef="_Dc_jpbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jpLecEemj_o0bRJUDkQ" sourceRef="_Dc_jobecEemj_o0bRJUDkQ" targetRef="_DdAKybecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKyrecEemj_o0bRJUDkQ" sourceRef="_DdAKybecEemj_o0bRJUDkQ" targetRef="_DdAKy7ecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_DdAKzLecEemj_o0bRJUDkQ" sourceRef="_DdAKy7ecEemj_o0bRJUDkQ" targetRef="_DdAKzbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="_Dc_jqLecEemj_o0bRJUDkQ" sourceRef="_DdAKzbecEemj_o0bRJUDkQ" targetRef="_Dc_jpbecEemj_o0bRJUDkQ"/>
+    <bpmn2:sequenceFlow id="SequenceFlow_2" sourceRef="_Dc_jpbecEemj_o0bRJUDkQ" targetRef="Task_2"/>
   </bpmn2:process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1">
-      <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="StartEvent_1">
-        <dc:Bounds height="36.0" width="36.0" x="160.0" y="247.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_1" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="14.0" width="69.0" x="144.0" y="283.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_EndEvent_1" bpmnElement="EndEvent_1">
-        <dc:Bounds height="36.0" width="36.0" x="707.0" y="247.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_2" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="14.0" width="66.0" x="692.0" y="283.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_Task_1" bpmnElement="Task_1" isExpanded="true">
-        <dc:Bounds height="50.0" width="110.0" x="240.0" y="240.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_3" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="14.0" width="35.0" x="277.0" y="258.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_Task_2" bpmnElement="Task_2" isExpanded="true">
-        <dc:Bounds height="50.0" width="110.0" x="390.0" y="240.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_4" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="14.0" width="35.0" x="427.0" y="258.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_Task_3" bpmnElement="Task_3" isExpanded="true">
-        <dc:Bounds height="50.0" width="110.0" x="553.0" y="240.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_5" labelStyle="BPMNLabelStyle_1">
-          <dc:Bounds height="14.0" width="35.0" x="590.0" y="258.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_1" bpmnElement="SequenceFlow_1" sourceElement="BPMNShape_StartEvent_1" targetElement="BPMNShape_Task_1">
-        <di:waypoint xsi:type="dc:Point" x="196.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="218.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="240.0" y="265.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_6"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_2" bpmnElement="SequenceFlow_2" sourceElement="BPMNShape_Task_1" targetElement="BPMNShape_Task_2">
-        <di:waypoint xsi:type="dc:Point" x="350.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="370.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="390.0" y="265.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_7"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_3" bpmnElement="SequenceFlow_3" sourceElement="BPMNShape_Task_2" targetElement="BPMNShape_Task_3">
-        <di:waypoint xsi:type="dc:Point" x="500.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="526.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="553.0" y="265.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_8"/>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_SequenceFlow_4" bpmnElement="SequenceFlow_4" sourceElement="BPMNShape_Task_3" targetElement="BPMNShape_EndEvent_1">
-        <di:waypoint xsi:type="dc:Point" x="663.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="685.0" y="265.0"/>
-        <di:waypoint xsi:type="dc:Point" x="707.0" y="265.0"/>
-        <bpmndi:BPMNLabel id="BPMNLabel_9"/>
-      </bpmndi:BPMNEdge>
-    </bpmndi:BPMNPlane>
-    <bpmndi:BPMNLabelStyle id="BPMNLabelStyle_1">
-      <dc:Font name="arial" size="9.0"/>
-    </bpmndi:BPMNLabelStyle>
-  </bpmndi:BPMNDiagram>
 </bpmn2:definitions>

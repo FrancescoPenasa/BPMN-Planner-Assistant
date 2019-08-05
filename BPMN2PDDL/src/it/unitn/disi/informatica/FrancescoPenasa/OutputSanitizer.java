@@ -77,9 +77,8 @@ public class OutputSanitizer {
 						from = line.indexOf("(") + 1; 
 						to = line.indexOf(")");
 						state = line.substring(from, to);
-						
-						
-						if (time < times.size()) {
+												
+						if (time == times.size()) {
 							states = new ArrayList<String>();
 							states.add(state);
 							times.add(states);

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="TODO"/>
+		<item key="selection" value="&#x0A;&#x09;&#x09;/* creo un nuovo bpmn2 con i nuovi stati */&#x0A;&#x09;&#x09;BpmnUpdater bu = new BpmnUpdater(new_states, bpmn, bpmn_url, from_state_id, to_state_id);&#x09;&#x09;&#x09;&#x0A;&#x09;&#x09;&#x0A;&#x09;&#x09;&#x0A;&#x09;&#x09;/* print */ &#x0A;&#x09;&#x09;System.out.println(&quot;finito&quot;);&#x0A;&#x09;&#x09;System.out.println(&quot;piano completato con &quot; + new_states.size() + &quot; stati.&quot;);&#x0A;&#x09;&#x09;if (metrics != null) {&#x0A;&#x09;&#x09;&#x09;System.out.println(&quot;cost totale &quot; + metrics + &quot;.&quot;);&#x0A;&#x09;&#x09;}&#x0A;&#x09;&#x09;System.out.println(&quot;aggiunt &quot; + new_states.size() + &quot; task a bpmn.&quot;);&#x09;"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="&#x0A;&#x09;&#x09;/* creo un nuovo bpmn2 con i nuovi stati */&#x0A;&#x09;&#x09;BpmnUpdater bu = new BpmnUpdater(new_states, bpmn, bpmn_url, from_state_id, to_state_id);&#x09;&#x09;&#x09;&#x0A;&#x09;&#x09;&#x0A;&#x09;&#x09;&#x0A;&#x09;&#x09;/* print */ &#x0A;&#x09;&#x09;System.out.println(&quot;finito&quot;);&#x0A;&#x09;&#x09;System.out.println(&quot;piano completato con &quot; + new_states.size() + &quot; stati.&quot;);&#x0A;&#x09;&#x09;if (metrics != null) {&#x0A;&#x09;&#x09;&#x09;System.out.println(&quot;cost totale &quot; + metrics + &quot;.&quot;);&#x0A;&#x09;&#x09;}&#x0A;&#x09;&#x09;System.out.println(&quot;aggiunt &quot; + new_states.size() + &quot; task a bpmn.&quot;);&#x09;"/>
 			<item value="TODO"/>
 			<item value="vala"/>
 			<item value="DIR"/>
@@ -15,12 +16,6 @@
 			<item value="Please delete pippo"/>
 			<item value="&#x09;&#x09;// extract from bpmn"/>
 			<item value="Task"/>
-			<item value="&quot;To&quot;"/>
-			<item value="To"/>
-			<item value="lane"/>
-			<item value="BPMNtoJAVA"/>
-			<item value="F"/>
-			<item value="classnot"/>
 		</list>
 		<list key="replacehistory">
 			<item value="&quot;_To_&quot;"/>
