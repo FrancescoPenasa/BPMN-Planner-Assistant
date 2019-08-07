@@ -12,6 +12,8 @@ import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
 import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.Lane;
+import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SequenceFlow;
@@ -27,7 +29,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 public class Test {
 
 	public static void main(String[] args) throws CoreException {
-		File file = new File("/home/lithium/dev/eclipse-workspace/bpmnCollection/simple.bpmn2");
+		File file = new File("/home/lithium/dev/eclipse-workspace/bpmnCollection/My.bpmn2");
 		// Create a resource set.
 		ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -64,44 +66,18 @@ public class Test {
 					System.out.println(re.getId());
 					Process p = (Process) re;
 					for(FlowElement fe : p.getFlowElements()) {
-						System.out.println(fe.getId());
-					}
-				}
-				else {
-					System.err.println(re.getId());
-				}
-			}
-		}
-		
-		
-		for (RootElement p : def.getRootElements()) {
-			if (p instanceof Process) {
-				for(FlowElement fe : ((Process)p).getFlowElements()) {
-					// trovato il task da cui aggiungere modifiche
-					if (fe.getId().equals("Task_1")) {
-						System.out.println("vala mona");
 						
-						Task from = (Task) fe;
-						Task task_to_add = Bpmn2Factory.eINSTANCE.createTask();
-						
-						from.setName("nuovo Task 2");
-
-						task_to_add.setId("Task_7");
-						task_to_add.setName("task aggiunto");
-						
-						
-						// cambia i sequenceFlow in uscita da from per farli andare in task
-						for (SequenceFlow sf : from.getOutgoing()) {						
-							if (sf.getTargetRef() instanceof FlowElement) {
-								sf.setTargetRef(task_to_add);
-							}
+						if (fe instanceof Task) {
+							Task t = (Task) fe;
+							System.out.println(t.getId() + " ---- " + t.getLanes().get(0).getId());
 						}
 						
 					}
 				}
 			}
-			
 		}
+		
+		
 		
 	}
 }

@@ -4,35 +4,20 @@
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.eclipse.bpmn2.BaseElement;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.ExclusiveGateway;
 import org.eclipse.bpmn2.FlowElement;
 import org.eclipse.bpmn2.FlowNode;
-import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.Lane;
 import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.di.BPMNDiagram;
-import org.eclipse.bpmn2.di.BPMNEdge;
-import org.eclipse.bpmn2.di.BPMNPlane;
-import org.eclipse.bpmn2.di.BPMNShape;
-import org.eclipse.bpmn2.di.BpmnDiFactory;
-import org.eclipse.dd.di.DiagramElement;
-import org.eclipse.dd.di.Plane;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 
 /**
  * @author lithium
@@ -41,6 +26,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 public class BpmnUpdater {
 
 	Definitions def = null;
+	
 
 	/**
 	 * prende gli elementi presenti in lis, li fa diventare dei task li collega in
@@ -63,7 +49,8 @@ public class BpmnUpdater {
 		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
 		List<SequenceFlow> outgoings = new ArrayList<SequenceFlow>(); // collezione di sf uscenti dal nodo from
 
-		FlowNode from = getFlowNode(from_elem); // nodo iniziale
+		FlowNode init = getFlowNode(from_elem); // nodo iniziale
+		FlowNode from = init;
 		FlowNode to = getFlowNode(to_elem); // nodo finale
 
 		from.setName(from.getName() + " interrupted");
@@ -226,7 +213,6 @@ public class BpmnUpdater {
 		}
 			// ----------- FINE AGGIUNTA NUOVI STATI ----------------- //
 
-		
 			if (to_elem == null) {
 				for (SequenceFlow outgoing : outgoings) {
 					
@@ -241,9 +227,16 @@ public class BpmnUpdater {
 				new_links.add(new_sf);
 			}
 			
-			
+			System.out.println(init.getId());
 			// aggiungo i nuovi elementi
-			p.getFlowElements().addAll(new_elements);
+			if (init.getLanes().isEmpty()) {	// if the from FlowNode is not in a Lane add new_elements to the same Process
+				p.getFlowElements().addAll(new_elements);
+			} else {							// if the from FlowNode is in a Lane add new_elements to the same Lane
+				Lane l = init.getLanes().get(0);
+				l.getFlowNodeRefs().addAll(new_elements);
+				p.getFlowElements().addAll(new_elements);
+				System.out.println("toc");
+			}
 			p.getFlowElements().addAll(new_links);			
 
 			
