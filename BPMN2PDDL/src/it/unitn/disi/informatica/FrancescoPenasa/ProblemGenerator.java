@@ -1,8 +1,12 @@
 package it.unitn.disi.informatica.FrancescoPenasa;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 class ProblemGenerator {
 	
@@ -22,7 +26,7 @@ class ProblemGenerator {
 	 * @param goals
 	 * @throws IOException
 	 */
-	public ProblemGenerator(String domain, String objects, String init, String goals) throws IOException {
+	public ProblemGenerator(String domain, String from, String to) throws IOException {
 		this.nameFile = domain + "_prob.pddl";
 		// open the writer 
 		OutputWriter w = new OutputWriter (nameFile);
@@ -34,13 +38,16 @@ class ProblemGenerator {
 		// until (:domain ; first 4 rows
 		writeIntro(domain);
 		
-		//(:objects
+		String objects = getObjects(from);
+		// write objects
 		writeObjects(objects);
 		
-		//init state
-		writeInit(init);
-		
-		//goal state
+		String init = getInit(from);
+		// write the init states, and init the constrans at 0
+		writeInit(init);		
+
+		String goals = getGoals(to);
+		// write the goal states
 		writeGoal(goals);
 		
 		//last parenthesiS
@@ -70,7 +77,7 @@ class ProblemGenerator {
 	 * @param condition
 	 * @throws IOException
 	 */
-	public ProblemGenerator(String domain, String objects, String init, String goals, String max_constraints, String min_constraints) throws IOException {
+	public ProblemGenerator(String domain, String from, String to, String max_constraints, String min_constraints) throws IOException {
 		String constrains = max_constraints + min_constraints;
 		// open the writer and create a new file called "domain_prob_constraint0_constraint1_.pddl
 		this.nameFile = domain + "_prob" + generateNameFile(constrains) + ".pddl";
@@ -82,12 +89,16 @@ class ProblemGenerator {
 		// write info for the planner as the name of the problem and the domain
 		writeIntro(domain, constrains);
 		
+		
+		String objects = getObjects(from);
 		// write objects
 		writeObjects(objects);
 		
+		String init = getInit(from);
 		// write the init states, and init the constrans at 0
 		writeInit(init, constrains);		
 
+		String goals = getGoals(to);
 		// write the goal states
 		writeGoal(goals);
 		
@@ -105,6 +116,91 @@ class ProblemGenerator {
 		System.out.flush();	
 	}
 
+
+	private String getGoals(String path) {
+		String line;
+		String goals = "";
+		String start_marker = ":goal";
+		boolean reading = false;
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			while((line = br.readLine()) != null) {
+				if(reading) {
+					goals += line;
+				}
+				if(line.contains(start_marker)){
+					reading = true;
+					int index = line.indexOf(start_marker);
+					index += start_marker.length();
+					goals += line.subSequence(index, line.length());					
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return myString.removeInvalidParenthesis(goals);
+	}
+	
+
+	private String getInit(String path) {
+		String line;
+		String goals = "";
+		String marker = ":init";
+		String marker_stop = ":goal";
+		boolean reading = false;
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			while((line = br.readLine()) != null) {
+				if(line.contains(marker_stop)){
+					reading = false;				
+				}
+				if(reading) {
+					goals += line;
+				}
+				if(line.contains(marker)){
+					reading = true;
+					int index = line.indexOf(marker);
+					index += marker.length();
+					goals += line.subSequence(index, line.length());					
+				}				
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return myString.removeInvalidParenthesis(goals);
+	}
+	
+
+	private String getObjects(String path) {
+		String line;
+		String goals = "";
+		String marker = ":objects";
+		String marker_stop = ":init";
+		boolean reading = false;
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			while((line = br.readLine()) != null) {
+				if(line.contains(marker_stop)){
+					reading = false;				
+				}
+				if(reading) {
+					goals += line;
+				}
+				if(line.contains(marker)){
+					reading = true;
+					int index = line.indexOf(marker);
+					index += marker.length();
+					goals += line.subSequence(index, line.length());					
+				}				
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return myString.removeInvalidParenthesis(goals);
+	}
 
 	/**
 	 * write definition and requirements on the domain file

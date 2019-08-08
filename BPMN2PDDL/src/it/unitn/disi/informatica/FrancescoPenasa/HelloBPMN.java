@@ -21,16 +21,13 @@ public class HelloBPMN {
 	// mandatory input parameters
 	private static String bpmn_url = "";
 	
-	private static String domain_name = "";
 	private static String domain_url = "";
-	
-	private static String problem_obj = "";
-	private static String problem_init = "";
-	private static String problem_goal = "";
-	
+	private static String domain_name = "";
+		
 	private static String planner_url = "";
 	
 	private static String from = "";
+	private static String from_path = "";
 	
 	// optional input parameters
 	private static String problem_max_conditions = "";
@@ -53,22 +50,7 @@ public class HelloBPMN {
 			case "-b":
 			case "--bpmn":
 				bpmn_url = args[++i];
-				break;
-			
-			case "-i":
-			case "--init":
-				problem_init = args[++i];
-				break;
-			
-			case "-o":
-			case "--obj":
-				problem_obj = args[++i];
-				break;
-				
-			case "-g":
-			case "--goal":
-				problem_goal = args[++i];
-				break;
+				break;			
 				
 			case "-d":
 			case "--domain":
@@ -121,7 +103,6 @@ public class HelloBPMN {
 	 */
 	private static void check_mandatory_input() {
 		if (bpmn_url.isEmpty() || domain_url.isEmpty()
-				|| problem_goal.isEmpty() || problem_init.isEmpty() || problem_obj.isEmpty()
 				|| planner_url.isEmpty()  || from.isEmpty()) {
 			System.err.println("wrong usage, use java bpmnpddl --help to see the correct usage");
 		}
@@ -137,23 +118,18 @@ public class HelloBPMN {
 				+ "\n"
 				+ "-h  || --help -> print this\n"
 				+ "-b  || --bpmn -> url of the bpmn2 file\n"
-				+ "-d || --domain  -> url of the pddl file that describe the domain\n"
-				+ "-o  || --obj 	-> objects to use in PDDL problem file that will be generated (ex. \"right - gripper left - gripper b - box\")\n"
-				+ "-i  || --init    -> init states to use in PDDL problem file that will be generated (ex. \"(and (at b roomA) (holding left b))\")\n"
-				+ "-g  || --goal    -> goal states to use in PDDL problem file that will be generated (ex. \"(and (at b roomB) (not (holding left b)))\") \n"
+				+ "-d  || --domain  -> url of the pddl file that describe the domain\n"
 				+ "-p  || --planner -> url where to find the planner to use and the syntax to use (ex. \"/home/user/dev/planner/popf2/plan domain0 prob0 output0\")\n"
 				+ "-f  || --from -> id of the baseelement that failed in bpmn2\n"
 				+ "-t  || --to -> id of the baseelement that you wish to reach with the new states in bpmn2 (must be compilance with the --goal states) \n"
 				+ "-max -> conditions that you want to maximize (ex. \"(fuel)\")\n"
-				+ "-min -> conditions that you want to minimize (ex. \"(time) (price)\"\n"
+				+ "-min -> conditions that you want to minimize (ex. \"(+ (time) (price))\"\n"
 				+ "\n"
 				+ "\n"
 				+ "Usage: -b /home/log/fails/hanoi.bpmn2 -d $path/hanoi_domain.pddl \n"
-				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3))\"\n"
 				+ "-p \"/home/user/dev/planner/popf2/plan domain0 prob0 output0\" --from Task_1 \n"
 				+ "\n"	
 				+ "Usage: -b /home/log/fails/rocket.bpmn2 -d /home/dev/pddl/rocket_domain.pddl \n"
-				+ "-o \"left mid right d1 d2 d3\" -i \"(on d3 left) (on d2 d3) (on d1 d2)\" -g \"(and (on d3 right) (on d2 d3))\"\n"
 				+ "-p \"/home/user/dev/planner/blackbox -o domain0 -f prob0  -g output0\" --from Task_1 --to EndEvent_1 \n"
 				+ "-min \"(total-cost)\"\n"	
 				+ "\n");
@@ -168,8 +144,9 @@ public class HelloBPMN {
 	 * @throws CoreException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 			
+		ProblemGenerator pr = new ProblemGenerator("domain", "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/Task_2");
 //		/* manage input */
 //		input_manager(args);
 //		
@@ -177,15 +154,17 @@ public class HelloBPMN {
 //		domain_name = get_domain_name(domain_url);
 //		
 //		/* extract bpmn */
-		Bpmn2Java bpmn = new Bpmn2Java();
-		bpmn_url = "/home/lithium/dev/eclipse-workspace/bpmnCollection/rocket.bpmn2";
-		bpmn.init(bpmn_url);
+//		Bpmn2Java bpmn = new Bpmn2Java();
+//		bpmn_url = "/home/lithium/dev/eclipse-workspace/bpmnCollection/rocket.bpmn2";
+//		bpmn.init(bpmn_url);
 //		
+//		
+//		String to_path = null;
 //		/* generate problem */ 
 //		ProblemGenerator pr = null;
 //		if (problem_max_conditions.length() == 0 && problem_min_conditions.length() == 0) {
 //			try {
-//				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal);
+//				pr = new ProblemGenerator (domain_name, from_path, to_path);
 //			} catch (IOException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
@@ -193,7 +172,7 @@ public class HelloBPMN {
 //		}
 //		else {
 //			try {
-//				pr = new ProblemGenerator (domain_name, problem_obj, problem_init, problem_goal, problem_max_conditions, problem_min_conditions);
+//				pr = new ProblemGenerator (domain_name, from_path, to_path, problem_max_conditions, problem_min_conditions);
 //			} catch (IOException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
@@ -204,24 +183,17 @@ public class HelloBPMN {
 //		/* execute the planner on the domain and problem file and create an output file */
 //		Planner planner = new Planner(planner_url, domain_url, problem_url);
 //		String output_url = planner.getOutputURL();
-		
-		
-		
-		
-		// TEST
-		String output_url = "/home/lithium/benchmark/outputsanitize/out";
-		from = "Task_1";
-		to = null;
-		
-		/* sanitize output file from unwanted data */ 
-		OutputSanitizer ov = new OutputSanitizer (output_url);
-		List<List<List<String>>> plans = ov.getPlans();
-		String metrics = ov.getMetrics();		
-		
-		
-		/* creo un nuovo bpmn2 con i nuovi stati */
-		MyFile.createBackup(bpmn_url);
-		BpmnUpdater bu = new BpmnUpdater(plans, bpmn, from, to);			
+//	
+//		
+//		/* sanitize output file from unwanted data */ 
+//		OutputSanitizer ov = new OutputSanitizer (output_url);
+//		List<List<List<String>>> plans = ov.getPlans();
+//		String metrics = ov.getMetrics();		
+//		
+//		
+//		/* creo un nuovo bpmn2 con i nuovi stati */
+//		MyFile.createBackup(bpmn_url);
+//		BpmnUpdater bu = new BpmnUpdater(plans, bpmn, from, to);			
 //		
 //		
 //		/* print */ 

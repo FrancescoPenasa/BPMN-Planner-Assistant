@@ -1,2 +1,0 @@
-((putdown r left roomb old1)
- (pickup r left roomb o))
