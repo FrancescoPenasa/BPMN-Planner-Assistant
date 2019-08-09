@@ -49,6 +49,7 @@ public class myString {
 	    		if (open < 0) {
 	    			str = str.substring(0, i) + str.substring(i+1, str.length());
 	    			i--;
+	    			open = 0;
 	    		}
 	    	}
 	    }

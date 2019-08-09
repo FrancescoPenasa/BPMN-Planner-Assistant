@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.InputManager"/>
-    <fullyQualifiedTypeName name="java.lang.ProcessBuilder.Redirect"/>
-    <fullyQualifiedTypeName name="java.io.IOException"/>
-    <fullyQualifiedTypeName name="java.io.InputStream"/>
-    <fullyQualifiedTypeName name="java.io.Writer"/>
-    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
-    <fullyQualifiedTypeName name="java.io.Reader"/>
-    <fullyQualifiedTypeName name="java.io.StringWriter"/>
-    <fullyQualifiedTypeName name="org.eclipse.core.internal.resources.File"/>
     <fullyQualifiedTypeName name="org.eclipse.core.internal.utils.FileUtil"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.FileUtils"/>
     <fullyQualifiedTypeName name="java.nio.file.CopyOption"/>
@@ -18,7 +9,6 @@
     <fullyQualifiedTypeName name="java.io.FileWriter"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Event"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Task"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Definitions"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Collaboration"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Activity"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Gateway"/>
@@ -31,13 +21,8 @@
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="java.io.FileReader"/>
     <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.OutputWriter"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.util.Dictionary"/>
     <fullyQualifiedTypeName name="java.lang.Integer"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.ExclusiveGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.InclusiveGateway"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.ParallelGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Bpmn2Factory"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BpmnDiFactory"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.BaseElement"/>
@@ -49,15 +34,30 @@
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Process"/>
     <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.Bpmn2Java"/>
     <fullyQualifiedTypeName name="org.eclipse.emf.ecore.xmi.XMLResource"/>
-    <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Resource"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BPMNShape"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BPMNEdge"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.SequenceFlow"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowNode"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.LaneSet"/>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowElement"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Lane"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.StartEvent"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="java.util.Set"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.myString"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.ProblemGenerator"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowElement"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.TrovaNodi"/>
+    <fullyQualifiedTypeName name="java.util.Dictionary"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.Definitions"/>
+    <fullyQualifiedTypeName name="java.util.Queue"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.FlowNode"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.SequenceFlow"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.ParallelGateway"/>
+    <fullyQualifiedTypeName name="org.eclipse.bpmn2.ExclusiveGateway"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.UUID"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
 </qualifiedTypeNameHistroy>

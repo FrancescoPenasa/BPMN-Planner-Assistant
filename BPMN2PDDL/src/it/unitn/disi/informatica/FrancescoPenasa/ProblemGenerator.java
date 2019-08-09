@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 class ProblemGenerator {
 	
@@ -27,7 +28,8 @@ class ProblemGenerator {
 	 * @throws IOException
 	 */
 	public ProblemGenerator(String domain, String from, String to) throws IOException {
-		this.nameFile = domain + "_prob.pddl";
+		String unicode = (String) UUID.randomUUID().toString().subSequence(0, 4);
+		this.nameFile = domain + "_prob" + unicode + ".pddl";
 		// open the writer 
 		OutputWriter w = new OutputWriter (nameFile);
 		writer = w.getFileWriter();

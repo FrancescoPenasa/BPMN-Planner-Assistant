@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -145,8 +146,36 @@ public class HelloBPMN {
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-			
+		// TODO changes on problem
+		// TODO find the to nodes
+		// TODO plan cycle
 		ProblemGenerator pr = new ProblemGenerator("domain", "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/Task_2");
+		TrovaNodi tv = new TrovaNodi();
+		List<List<String>> possible_outputs = tv.getOutputs();
+		for (List<String> outputs : possible_outputs) {
+			List<String> outputs_urls = new ArrayList<String>();
+			for (String out : outputs) {
+				pr = new ProblemGenerator("domain", "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/" + out);
+				String problem_url = pr.getUrl();
+				
+				Planner planner = new Planner(planner_url, domain_url, problem_url);
+				outputs_urls.add(planner.getOutputURL());
+				
+				
+			}
+			for (String ot : outputs_urls){
+				OutputSanitizer ov = new OutputSanitizer (ot);
+				List<List<List<String>>> plans = ov.getPlans();
+				if (true){ // condizioni per cui va bene fermarsi
+					
+					
+				}
+			}
+			
+			if(true){ // se tutti rispettano le fantastiche condizione esco da ciclo e vai a farte ciavar
+			}
+			
+		}
 //		/* manage input */
 //		input_manager(args);
 //		
