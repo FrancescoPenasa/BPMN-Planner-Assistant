@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -22,12 +23,12 @@ public class TrovaNodi {
 
 	private List<List<String>> outputs = new ArrayList<List<String>>();
 	
-	public void TrovaNodi(Bpmn2Java bpmn, String from) {
+	
+
+	public TrovaNodi(Bpmn2Java bpmn, String from) {
 		Definitions def = bpmn.getDef();
 
-		// find starting element
-		
-		
+		// find starting element		
 		bpmn2_bfs(from, def);
 		
 		
@@ -35,7 +36,7 @@ public class TrovaNodi {
 
 	private void bpmn2_bfs(String from, Definitions def) {
 		
-		Queue<FlowNode> S = null;
+		Queue<FlowNode> S = new LinkedList<FlowNode>();
 		Map<String, Boolean> visitato = new HashMap<String, Boolean>();
 		FlowNode start = null;
 		for (RootElement re : def.getRootElements()) {

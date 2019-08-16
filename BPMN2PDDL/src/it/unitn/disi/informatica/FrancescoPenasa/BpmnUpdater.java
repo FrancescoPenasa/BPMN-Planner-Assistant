@@ -43,34 +43,50 @@ public class BpmnUpdater {
 	 * @param to_elem
 	 */
 	public BpmnUpdater(List<List<List<String>>> plans, Bpmn2Java bpmn, String from_elem, String to_elem) {
+		if (plans.isEmpty()) {
+			System.err.println("plans.isEmpty: ");
+			System.exit(-1);
+			
+		}
 		this.def = bpmn.getDef();
 
 		List<FlowNode> new_elements = new ArrayList<FlowNode>();
 		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
 		List<SequenceFlow> outgoings = new ArrayList<SequenceFlow>(); // collezione di sf uscenti dal nodo from
 
+		System.err.println(from_elem + " gne gne " + to_elem);
+		
+		// find the from node using his ID
 		FlowNode init = getFlowNode(from_elem); // nodo iniziale
 		FlowNode from = init;
+		// find the to node using his ID
 		FlowNode to = getFlowNode(to_elem); // nodo finale
-
-		from.setName(from.getName() + " interrupted");
-		outgoings = from.getOutgoing();
 		
+		from.setName(from.getName() + " interrupted");
+		
+		
+		// find the process parent of the "from" node
 		Process p = null;
 		for (RootElement re : this.def.getRootElements()) {
 			if (re instanceof Process) {	
-				p = (Process) re;
-				for (FlowElement fe : p.getFlowElements()) {
+				Process pr = (Process) re;
+				for (FlowElement fe : pr.getFlowElements()) {
 					if (fe instanceof FlowNode) {
 						if (fe.getId().equals(from.getId())) {
-							p = (Process) re;
+							p = pr;
 						}
 					}
 				}
 			}
 		}
-		p.getFlowElements().removeAll(outgoings);
 		
+		p.getFlowElements().removeAll(from.getOutgoing());
+		for (SequenceFlow sf : from.getOutgoing()) {
+			FlowNode nf = sf.getTargetRef();
+			nf.getIncoming().remove(sf);
+		}
+		from.getOutgoing().removeAll(from.getOutgoing());
+		System.err.println(p.getFlowElements());
 		SequenceFlow sf;
 
 		// ----------- AGGIUNTA NUOVI STATI ----------------- //
@@ -214,8 +230,7 @@ public class BpmnUpdater {
 			// ----------- FINE AGGIUNTA NUOVI STATI ----------------- //
 
 			if (to_elem == null) {
-				for (SequenceFlow outgoing : outgoings) {
-					
+				for (SequenceFlow outgoing : outgoings) {					
 					outgoing.setSourceRef(from);					
 					new_links.add(outgoing);
 				}
@@ -227,7 +242,6 @@ public class BpmnUpdater {
 				new_links.add(new_sf);
 			}
 			
-			System.out.println(init.getId());
 			// aggiungo i nuovi elementi
 			if (init.getLanes().isEmpty()) {	// if the from FlowNode is not in a Lane add new_elements to the same Process
 				p.getFlowElements().addAll(new_elements);
@@ -295,6 +309,12 @@ public class BpmnUpdater {
 			}
 		}
 	
+
+	private void DEBUG() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	private FlowNode getFlowNode(String id) {
 		Process p = null;

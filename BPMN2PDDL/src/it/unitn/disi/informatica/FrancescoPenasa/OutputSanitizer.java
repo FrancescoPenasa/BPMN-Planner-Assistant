@@ -19,7 +19,7 @@ import java.util.List;
 public class OutputSanitizer {
 
 	List<List<List<String>>> plans = new ArrayList<List<List<String>>>();
-	
+	boolean no_solution = false;
 	/**
 	 * cerca il file output, perch[ non e' detto che sia uguale a quello immesso nel planner alcuni planner
 	 * generano file tipo output.txt1 output.txt2. PRENDO sempre il primo (o l'ultimo devo ancora decidere)
@@ -32,7 +32,7 @@ public class OutputSanitizer {
 	 */
 	public OutputSanitizer(String output_path) {		
 		List<File> outputs = new ArrayList<File>();
-		
+		no_solution = false;
 		// mi salvo tutti gli output ottenuti, che hanno sempre la forma "output_path_x.SOL"
 		File f = null;
 		boolean file_exist = true;
@@ -59,8 +59,10 @@ public class OutputSanitizer {
 		int from; 
 		int to;
 		int time;
-		
 		// per ogni file di output mi salvo il piano
+		
+		System.out.println("times:" + output_path); 
+		
 		for (File plan : outputs) {
 			times = new ArrayList<List<String>>();
 			
@@ -72,10 +74,14 @@ public class OutputSanitizer {
 					} 
 					
 					// mi salvo il tempo di esecuzione e il nome dellazione
+					else if (line.contains("no solution")){
+						no_solution = true;
+						System.out.println("\n NO SOLUTION \n");
+					}
 					else {
 						time = Integer.valueOf(String.valueOf(line.charAt(0)));		
 						from = line.indexOf("(") + 1; 
-						to = line.indexOf(")");
+						to = line.indexOf(")");	
 						state = line.substring(from, to);
 												
 						if (time == times.size()) {
@@ -97,9 +103,7 @@ public class OutputSanitizer {
 				e.printStackTrace();
 			}
 
-			
 			plans.add(times);
-			times = null;
 		}
 		
 		
@@ -126,6 +130,22 @@ public class OutputSanitizer {
 	// TODO 
 	public String getMetrics() {
 		return null;
+	}
+
+
+
+
+
+
+	public boolean getValidity(int DISTANCE) {
+		for (List<List<String>> plan : plans) {
+			if (plan.size() > DISTANCE)
+				return false;
+		}
+		if (no_solution) {
+			return false;
+		}
+		return true;
 	}
 		
 	

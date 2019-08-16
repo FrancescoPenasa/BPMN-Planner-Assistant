@@ -1,0 +1,14 @@
+
+; Version LPG-td-1.4
+; Seed 93145963
+; Command line: /home/lithium/planner/LPG-td-1.4/lpg-td -o /home/lithium/inputs/input0-files/blocksworld_domain.pddl -f /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob3bf8.pddl -out /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob3bf8_output -n 1 
+; Problem /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob3bf8.pddl
+; Actions having STRIPS duration
+; Time 0.00
+; Search time 0.00
+; Parsing time 0.00
+; Mutex time 0.00
+; NrActions 0
+
+
+no solution

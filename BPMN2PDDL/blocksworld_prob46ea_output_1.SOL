@@ -1,0 +1,16 @@
+
+; Version LPG-td-1.4
+; Seed 23123183
+; Command line: /home/lithium/planner/LPG-td-1.4/lpg-td -o /home/lithium/inputs/input0-files/blocksworld_domain.pddl -f /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob46ea.pddl -out /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob46ea_output -n 1 
+; Problem /home/lithium/dev/eclipse-workspace/BPMN2PDDL/blocksworld_prob46ea.pddl
+; Actions having STRIPS duration
+; Time 0.01
+; Search time 0.01
+; Parsing time 0.00
+; Mutex time 0.00
+; NrActions 4
+
+0:   (PICKUP B) [1]
+1:   (STACK B C) [1]
+2:   (PICKUP A) [1]
+3:   (STACK A B) [1]
