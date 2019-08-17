@@ -1,26 +1,16 @@
-/**
- * 
- */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.bpmn2.Bpmn2Package;
-import org.eclipse.bpmn2.Collaboration;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LaneSet;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -28,26 +18,30 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 
 /**
- * @author ubuntu
- *
+ * convert bpmn2 elements from the file URL in java Objects 
+ * and gives some getter and setter to have access to the file BpmnElements.
+ * 
+ * @author FrancescoPenasa
+ * 
  */
 public class Bpmn2Java {
 
-	/**
-	 * 
-	 */
-	
+
+	// ============ PARAMETERS ============== //
+	// ------------ private ------------- //
 	private static Definitions def;
 	private static Resource resource;
 	
-	/** does everything that is needed to import a bpmn2 file in java **/
+	/** constructor **/
 	public Bpmn2Java (){		
-		System.out.println("BPMN2 to JAVA finished!");
+		
 	}
 	
+	// ============ METHODS ============== //
+	// ------------ public ------------- //
 	/**
-	 * tuta sta roba da fare
-	 * @param URL
+	 * convert bpmn2 elements from the file URL in java Objects
+	 * @param URL path to the bpmn2 file
 	 */
 	public void init(String URL) {
 		File file = new File(URL);
@@ -81,84 +75,12 @@ public class Bpmn2Java {
 		}		
 		if (doc != null) {
 			setDef(doc.getDefinitions());
-		}
-	
+		}			
 	}
 
-	/**
-	 * get All Process in an ArrayList from the bpmn2 file
-	 * @return ArrayList<Process>
-	 */
-	public List<Process> getAllProcess() {
-		List<Process> allProcess = new ArrayList<Process>();
-		for (RootElement re : getDef().getRootElements()) {
-			if (re instanceof Process) {
-				allProcess.add((Process)re);				
-			}
-		}
-		return allProcess;
-	}
+		
 	
-	/**
-	 * get All Collaboration in an ArrayList from the bpmn2 file
-	 * @return ArrayList<Collaboration>
-	 */
-	public List<Collaboration> getAllCollaborations() {
-		List<Collaboration> allCollaborations = new ArrayList<Collaboration>();
-		for (RootElement re : getDef().getRootElements()) {
-			if (re instanceof Collaboration) {
-				allCollaborations.add((Collaboration)re);
-			}
-		}
-		return allCollaborations;
-	}
-	
-	//TODO ALL OBJECTS PAIRED WITH THEIR OWNER
-	public void getRootElemOwnerDictionary() {
-		Map<String, String> map = new HashMap<String, String>();
-	}
-	
-	
-	
-	/**
-	 * A LOT OF PRINT
-	 */
-	private void testing() {
-		
-		
-		for (Process p : getAllProcess()) {
-			
-			for(LaneSet le : p.getLaneSets()) {
-				System.out.println("Lane set: " + le.getId());
-				for(Lane l : le.getLanes()) {
-					System.out.println("Lane: " + l.getName());
-				}
-			}
-		}
-		
-		
-		
-		
-		//System.out.println("Definition" + def +"\n\n");
-		//System.out.println("Definition.getRootElements" + def.getRootElements() +"\n\n");
-		for (RootElement re : getDef().getRootElements()) {
-			//System.out.println("root elements are: " + re.getId());
-			if (re instanceof Process) {
-				Process p = (Process) re;
-				for(FlowElement fe : p.getFlowElements()) {
-					System.err.println("class" + fe.getClass().getSimpleName());
-					if (fe instanceof Task) {
-						Task t = (Task) fe;
-						for(FlowElement ffe : t.getOutgoing()) {
-							//System.out.println("INCOMING " + ffe.getId());
-						}
-					}	
-					//System.out.println("child " + fe.getId());
-				}
-			}
-		}	
-	}
-
+	// --- SETTER AND GETTER METHODS --- //
 	public static Definitions getDef() {
 		return def;
 	}
@@ -174,5 +96,21 @@ public class Bpmn2Java {
 	public static void setResource(Resource resource) {
 		Bpmn2Java.resource = resource;
 	}
+	
+	/**
+	 * get All Process in an ArrayList from the bpmn2 file
+	 * @return ArrayList<Process>
+	 */
+	public List<Process> getAllProcess() {
+		List<Process> allProcess = new ArrayList<Process>();
+		for (RootElement re : getDef().getRootElements()) {
+			if (re instanceof Process) {
+				allProcess.add((Process)re);				
+			}
+		}
+		return allProcess;
+	}
+	
+	// -------- end of the class ----------- //	
 }
 

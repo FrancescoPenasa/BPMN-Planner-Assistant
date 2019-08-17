@@ -11,15 +11,21 @@ import java.io.Writer;
 
 /**
  *  //  https://www.mkyong.com/java/how-to-execute-shell-command-from-java/  //
- * @author lithium
- *
+ * 
+ * @author FrancescoPenasa
+ * 
  */
-
-
 public class Planner {
 	
+	// ===================================== PARAMETERS ======================================= //
+	
+	// --------------------------------------- private ---------------------------------------- //	
 	private String outputPath = "";
 
+	
+	// ====================================== METHODS ========================================= //
+	
+	//---------------------------------------- public ----------------------------------------- //
 	/**
 	 * genero un file di output nello stesso path del file problema
 	 * chiamo il planner con i parametri specificati nell input sostituendo a domain e prob i path veri
@@ -75,7 +81,7 @@ public class Planner {
 	}
 	
 
-	/*
+	/**
 	 * To convert the InputStream to String we use the Reader.read(char[]
 	 * buffer) method. We iterate until the Reader return -1 which means
 	 * there's no more data to read. We use the StringWriter class to
@@ -102,8 +108,11 @@ public class Planner {
 		}
 	}
 
-
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public String getOutputURL() {
 		return this.outputPath;
 	}

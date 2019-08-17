@@ -1,13 +1,15 @@
-/**
- * 
- */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 /**
- * @author lithium
- *
+ * 
+ * @author FrancescoPenasa
+ * 
  */
-public class myString {
+public class MyString {
+	
+	// ====================================== METHODS ========================================= //
+	
+	// --------------------------------------- public ----------------------------------------- //
 	//  method checks if character is parenthesis(open 
 	// or closed) 
 	public static boolean isParenthesis(char c) 

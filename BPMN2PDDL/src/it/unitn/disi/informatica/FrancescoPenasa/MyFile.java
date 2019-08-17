@@ -8,12 +8,25 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+/**
+ * 
+ * @author FrancescoPenasa
+ * 
+ */
 public class MyFile {
 	
-	//----------- CONST -----------------//
+	// ===================================== PARAMETERS ======================================= //
+	
+	// --------------------------------------- private ---------------------------------------- //	
+	// ---------------------------------------- const ----------------------------------------- //	
 	final private static int RND_SIZE_FROM = 0;
 	final private static int RND_SIZE_TO = 4;
 	
+	
+	
+	// ====================================== METHODS ========================================= //
+	
+	// --------------------------------------- public ----------------------------------------- //
 	/**
 	 * Crea un backup del file bpmn2 nella stessa cartella in cui 
 	 * e' presente il file originale.
@@ -21,10 +34,10 @@ public class MyFile {
 	 */
 	public static void createBackup(String source, boolean original) {
 		String dst;
+		String unicode = (String) UUID.randomUUID().toString().subSequence(RND_SIZE_FROM, RND_SIZE_TO);
 		if (original) {
-			dst = source.replaceAll(".bpmn2", "_original.bpmn2");
+			dst = source.replaceAll(".bpmn2", "_" + unicode + "_original.bpmn2");
 		} else {
-			String unicode = (String) UUID.randomUUID().toString().subSequence(RND_SIZE_FROM, RND_SIZE_TO);
 			dst = source.replaceAll(".bpmn2", "_" + unicode + ".bpmn2");
 		}
 		Path FROM = Paths.get(source);

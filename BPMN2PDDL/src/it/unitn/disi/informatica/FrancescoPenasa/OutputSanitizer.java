@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 import java.io.BufferedReader;
@@ -9,17 +6,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
 
 /**
- * @author lithium
- *
+ * 
+ * @author FrancescoPenasa
+ * 
  */
 public class OutputSanitizer {
 
+	// ===================================== PARAMETERS ======================================= //
+	
+	// --------------------------------------- private ---------------------------------------- //	
 	List<List<List<String>>> plans = new ArrayList<List<List<String>>>();
 	boolean no_solution = false;
+	
+	
+	
+	// ====================================== METHODS ========================================= //
+	
+	// --------------------------------------- public ----------------------------------------- //
 	/**
 	 * cerca il file output, perch[ non e' detto che sia uguale a quello immesso nel planner alcuni planner
 	 * generano file tipo output.txt1 output.txt2. PRENDO sempre il primo (o l'ultimo devo ancora decidere)
@@ -46,10 +52,6 @@ public class OutputSanitizer {
 				file_exist = false;
 			}
 		}
-		
-		
-		
-		
 		
 		List<List<String>> times = new ArrayList<List<String>>();
 		List<String> states = null;
@@ -93,30 +95,17 @@ public class OutputSanitizer {
 							times.get(time).add(state);							
 						}
 					}
-				}
-				
+				}				
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 			plans.add(times);
-		}
-		
-		
-		
-	
-	
+		}		
 	}
 	
 	
-
-
-
-
 	/**
 	 * get states
 	 * @return
@@ -124,17 +113,12 @@ public class OutputSanitizer {
 	public List<List<List<String>>> getPlans() {
 		return this.plans;
 	}
-	
 
 
 	// TODO 
 	public String getMetrics() {
 		return null;
 	}
-
-
-
-
 
 
 	public boolean getValidity(int DISTANCE) {
@@ -146,8 +130,5 @@ public class OutputSanitizer {
 			return false;
 		}
 		return true;
-	}
-		
-	
-
+	}		
 }

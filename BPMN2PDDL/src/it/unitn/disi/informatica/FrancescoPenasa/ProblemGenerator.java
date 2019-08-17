@@ -6,17 +6,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * 
+ * @author FrancescoPenasa
+ * 
+ */
 class ProblemGenerator {
 	
-	private FileWriter writer = null;
+	// ===================================== PARAMETERS ======================================= //
 	
+	// --------------------------------------- private ---------------------------------------- //	
+	private FileWriter writer = null;
 	private String nameFile = "";
 	
 
-
+	
+	// ====================================== METHODS ========================================= //
+	
+	//---------------------------------------- public ----------------------------------------- //
 	/**
 	 * questo costruttore si occupa di costrure il file pddl problem con le caratteristiche base,
 	 * cioè, si occupa di costruire un file di problem.pddl conforme alle caratteristiche di PDDL 1.1
@@ -62,12 +71,6 @@ class ProblemGenerator {
 		System.out.println("Standard Prob generator finished!");
 	}
 	
-	private String generateNameFile (String constraints) {
-		String name = constraints;
-		name = name.replaceAll("\\(", "_");
-		name = name.replaceAll("\\)", "");
-		return name;
-	}
 
 	/**
 	 * questo costruttore si occupa di generare un file problem.pddl con nome @param domain + "_prob
@@ -89,8 +92,7 @@ class ProblemGenerator {
 		this.nameFile = file.getAbsolutePath();
 		
 		// write info for the planner as the name of the problem and the domain
-		writeIntro(domain, constrains);
-		
+		writeIntro(domain, constrains);	
 		
 		String objects = getObjects(from);
 		// write objects
@@ -119,6 +121,16 @@ class ProblemGenerator {
 	}
 
 
+	
+	//---------------------------------------- private ---------------------------------------- //
+	private String generateNameFile (String constraints) {
+		String name = constraints;
+		name = name.replaceAll("\\(", "_");
+		name = name.replaceAll("\\)", "");
+		return name;
+	}
+	
+	
 	private String getGoals(String path) {
 		String line;
 		String goals = "";
@@ -141,7 +153,7 @@ class ProblemGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return myString.removeInvalidParenthesis(goals);
+		return MyString.removeInvalidParenthesis(goals);
 	}
 	
 
@@ -171,7 +183,7 @@ class ProblemGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return myString.removeInvalidParenthesis(goals);
+		return MyString.removeInvalidParenthesis(goals);
 	}
 	
 
@@ -201,8 +213,9 @@ class ProblemGenerator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return myString.removeInvalidParenthesis(goals);
+		return MyString.removeInvalidParenthesis(goals);
 	}
+	
 
 	/**
 	 * write definition and requirements on the domain file
@@ -213,6 +226,7 @@ class ProblemGenerator {
 		writer.write("(define (problem " + DOMAIN + "_prob0)\n");
 		writer.write("\t(:domain " + DOMAIN + ")\n\n");
 	}
+	
 	
 	/**
 	 * write definition and requirements on the domain file
@@ -241,6 +255,7 @@ class ProblemGenerator {
 		writer.write("\t\t" + INIT + "\n");
 		writer.write("\t)\n\n");
 	}
+	
 	
 	//-------------------- INIT -------------------///
 	// (at rabbit a) (at carrot b) (at box c)
@@ -276,9 +291,7 @@ class ProblemGenerator {
 		writer.write("\t)\n\n");
 	}
 	
-
 	
-
 	/**
 	 * 
 	 * @throws IOException
@@ -296,6 +309,7 @@ class ProblemGenerator {
 		writer.write("\t)\n");
 	}
 
+	
 	private void writeMetric(String maximize, String minimize) throws IOException {
 		writer.write("\t(:metric \n");
 		
@@ -315,13 +329,13 @@ class ProblemGenerator {
 	}
 
 
+	
+	// =============================== SETTER AND GETTER ====================================== //
 	public Object getPath() {
-		// TODO Auto-generated method stub
 		return "pat";
 	}
 
 	public String getUrl() {
 		return this.nameFile;
 	}
-
 }

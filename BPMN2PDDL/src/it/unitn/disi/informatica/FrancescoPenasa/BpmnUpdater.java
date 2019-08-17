@@ -1,6 +1,3 @@
-/**
- * 
- */
 package it.unitn.disi.informatica.FrancescoPenasa;
 
 import java.io.IOException;
@@ -20,14 +17,27 @@ import org.eclipse.bpmn2.SequenceFlow;
 import org.eclipse.bpmn2.Task;
 
 /**
- * @author lithium
+ * Class who manages update on the bpmn2 file.
+ * @author FrancescoPenasa
  *
  */
 public class BpmnUpdater {
 
-	Definitions def = null;
+	// ===================================== PARAMETERS ======================================= //
 	
+	// --------------------------------------- private ---------------------------------------- //	
+	private Definitions def = null;
+	private FlowNode init;
+	
+	// ==================================== constructor ====================================== //
+	public BpmnUpdater(Bpmn2Java bpmn, String from) {
+		this.def = bpmn.getDef();
+		this.init = getFlowNode(from);
+	}
 
+	// ====================================== METHODS ========================================= //
+	
+	// --------------------------------------- public ----------------------------------------- //
 	/**
 	 * prende gli elementi presenti in lis, li fa diventare dei task li collega in
 	 * successione al task che corrisponde a task_id_from, SE task_id_to != null
@@ -42,22 +52,16 @@ public class BpmnUpdater {
 	 * @param from_elem
 	 * @param to_elem
 	 */
-	public BpmnUpdater(List<List<List<String>>> plans, Bpmn2Java bpmn, String from_elem, String to_elem) {
+	public void update(List<List<List<String>>> plans, String to_elem) {
 		if (plans.isEmpty()) {
 			System.err.println("plans.isEmpty: ");
-			System.exit(-1);
-			
+			System.exit(-1);			
 		}
-		this.def = bpmn.getDef();
 
 		List<FlowNode> new_elements = new ArrayList<FlowNode>();
 		List<SequenceFlow> new_links = new ArrayList<SequenceFlow>();
 		List<SequenceFlow> outgoings = new ArrayList<SequenceFlow>(); // collezione di sf uscenti dal nodo from
 
-		System.err.println(from_elem + " gne gne " + to_elem);
-		
-		// find the from node using his ID
-		FlowNode init = getFlowNode(from_elem); // nodo iniziale
 		FlowNode from = init;
 		// find the to node using his ID
 		FlowNode to = getFlowNode(to_elem); // nodo finale
@@ -308,14 +312,8 @@ public class BpmnUpdater {
 				e.printStackTrace();
 			}
 		}
-	
 
-	private void DEBUG() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
+	// --------------------------------------- private ---------------------------------------- //	
 	private FlowNode getFlowNode(String id) {
 		Process p = null;
 		FlowNode res = null;

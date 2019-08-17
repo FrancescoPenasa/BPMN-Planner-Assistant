@@ -4,15 +4,30 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * 
+ * @author FrancescoPenasa
+ * 
+ */
 public class OutputWriter{
 
-	FileWriter fileWriter = null;
+	//====================================== PARAMETERS ========================================//
 	
+	//---------------------------------------- private ---------------------------------------- //	
+	private FileWriter fileWriter = null;
+	
+	
+	
+	// ==================================== constructor ====================================== //
 	public OutputWriter() {
 	}
 	
+	
+	
+	// ====================================== METHODS ========================================= //
+	
+	//---------------------------------------- public ----------------------------------------- //
 	public OutputWriter(String name) throws IOException {
-		
 		File file = new File(name); 
         if(file.exists()) { 
         	System.err.println("File: " + file.toString() + " already exist.\n"
@@ -26,6 +41,7 @@ public class OutputWriter{
         
         fileWriter = new FileWriter(name, true);		
 	}
+	
 	
 	public FileWriter getFileWriter() {
 		return fileWriter;

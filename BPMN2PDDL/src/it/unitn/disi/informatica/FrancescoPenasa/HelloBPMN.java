@@ -11,59 +11,30 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * main class
- * @author lithium
+ * @author FrancescoPenasa
  *
  */
 public class HelloBPMN {
 	
-	//======================== PARAMETERS =============================//
+	//====================================== PARAMETERS ========================================//
 	
-	//-------------------------- private ----------------------------//
-	// mandatory input parameters
+	//---------------------------------------- private ---------------------------------------- //
+	// mandatory input parameters //
 	private static String bpmn_url = "";	
 	private static String domain_url = "";		
 	private static String planner_url = "";
-	
 	private static String from = "";
 	private static String pddl_path = "";
 	
-	// optional input parameters
+	// optional input parameters // 
 	private static String problem_max_conditions = "";
 	private static String problem_min_conditions = "";
 	
 	
-	// ====================================== METHODS ==========================================//
 	
-	// ---------------------------------- private methods ------------------------------------- //
-	/**
-	 * 
-	 * @param url
-	 * @return
-	 */
-	private static String get_domain_name(String url) {
-		String domain = null;
-		try (BufferedReader br = new BufferedReader(new FileReader(url))) {
-			String line;
-			while((line = br.readLine()) != null) {
-				if (line.contains("domain")) {
-					int i = line.indexOf("domain");
-					domain = line.substring(i, line.length()-1);
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		domain = domain.replaceAll("domain", "");
-		domain = domain.replaceAll(" ", "");
-		return domain;
-	}
-		
-		
+	// ====================================== METHODS ========================================= //
+	
+	//---------------------------------------- private ---------------------------------------- //
 	/**
 	 * input handler 
 	 * @param args
@@ -121,7 +92,7 @@ public class HelloBPMN {
 		}
 		check_mandatory_input();
 	}
-
+	
 	
 	/**
 	 * check emptyness of mandatory inputs
@@ -167,12 +138,10 @@ public class HelloBPMN {
 	
 	
 	
-	// ===================================== main methods ===================================== //
+	// ======================================= MAIN =========================================== //
 	/**
-	 * CALLS ALL THE CLASSES
+	 * MAIN
 	 * @param args
-	 * @throws CoreException
-	 * @throws IOException
 	 */
 	public static void main(String[] args) {
 		
@@ -180,82 +149,104 @@ public class HelloBPMN {
 		input_manager(args);
 		
 		/* get domain name */ 
-		String domain = get_domain_name(domain_url);
+		String domain = FileScrapper.get_domain_name(domain_url);
+		System.out.println("Domain: \"" + domain + "\" String extracted from file");
 	
 		/* extract bpmn */
 		Bpmn2Java bpmn = new Bpmn2Java();
 		bpmn.init(bpmn_url);	
+		System.out.println("BPMN2 to JAVA initialization completed!");
 				
-		/* find all the possible dst nodes and set them in an ordered list, the order is the priority */
-		TrovaNodi tv = new TrovaNodi(bpmn, from);
-		//[["StartEvent_1"], ["Task_1"], ["Task_2", "Task_3", "ExclusiveGateway_1"], ["EndEvent_1"]]
-		List<List<String>> possible_dst_nodes = tv.getOutputs(); //
-			
+		/* find all the possible dst nodes and store them in an ordered list, the order is the priority */
+		MyBpmnGraph graph = new MyBpmnGraph(bpmn);
+		graph.bpmn2_bfs(from);
+		List<List<String>> possible_dst_nodes = graph.getBfsOrder(); //[["StartEvent_1"], ["Task_1"], ["Task_2", "Task_3", "ExclusiveGateway_1"], ["EndEvent_1"]]
+		System.out.println("\nbfs on bpmn2 completed, found the following order: ");
+		for(int i = 0; i < possible_dst_nodes.size(); i++) { System.out.println(i + " -> " + possible_dst_nodes.get(i)); }
+		
+		//-------------------------------
+
 		
 		ProblemGenerator pg = null;
 		Planner planner = null;
 		OutputSanitizer ov = null;		
-		int DISTANCE = 20;
+		
+		int DISTANCE = 20; // TODO CHANGE
+		
+		// lists
 		List<List<List<List<String>>>> plans = new ArrayList<List<List<List<String>>>>();; // exclusive_bpmn, exclusive, time, actions
 		List<String> dst_nodes = new ArrayList<String>();
 		
-		/* watch all the possible dst nodes */
-		boolean test = true;
-		for (int i = 1; i < possible_dst_nodes.size() && test; i++) { // starting from 1 because 0 is the from node
-
-			List<Boolean> exit_condition = new ArrayList<Boolean>();
-
-			// generate a problem file and an output file for every node existing in the list node_list, a
+		/* watch all the possible dst nodes, 
+		 * create a problem for them, 
+		 * use a planner on it 
+		 * and evaluate the output */
+		boolean cycle_condition = true;
+		// for every List<FlowNode> in List<List<FlowNode>>
+		for (int i = 1; i < possible_dst_nodes.size() && cycle_condition; i++) { // starting from 1 because 0 is the from node
+			// for every FlowNode in the List<FlowNode>
 			for (int j = 0; j < possible_dst_nodes.get(i).size(); j++){
-				// generate problem.pddl file
+				
+				// --- generate problem.pddl file --- //
 				try {
-					System.out.println("generating problem for : " + from + " -> " + possible_dst_nodes.get(i));
-					pg = new ProblemGenerator(domain, "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/" + possible_dst_nodes.get(i).get(j));
+					System.out.println("generating problem from: " + from + " to " + possible_dst_nodes.get(i));
+					// create standard problem 
+					if (problem_max_conditions.isEmpty() && problem_min_conditions.isEmpty()) 
+					{
+						pg = new ProblemGenerator(domain, "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/" + possible_dst_nodes.get(i).get(j));
+					} 
+					// create problem with metrics
+					else 
+					{
+						pg = new ProblemGenerator(domain, "/home/lithium/inputs/input0-files/Task_1", "/home/lithium/inputs/input0-files/" + possible_dst_nodes.get(i).get(j), problem_max_conditions, problem_min_conditions);
+					}
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				String problem_url = pg.getUrl();
-				
-				// generate output.SOL file using the planner
+				//---------------------------------- //
+						
+				// --- execute planner --- //
 				planner = new Planner(planner_url, domain_url, problem_url);
-				// valutate the output if it works
+				String planner_output = planner.getOutputURL();
+				// ----------------------- //
+				
+				// --- sanitize output --- //
 				ov = new OutputSanitizer (planner.getOutputURL());
-				if (ov.getValidity(DISTANCE)) {// funzione che mi restituisce vero o false in base al parametro e alla lunghezza degli stati
-					exit_condition.add(true);
-					System.err.println("im in"+ ov.getPlans());
+				// ----------------------- //
+				
+				// --- if output is valid and shorted than a certain value --- //
+				if (ov.getValidity(DISTANCE)) {
 					plans.add(ov.getPlans());
-					System.out.println("plan added" + ov.getPlans());
+					System.out.println("plan added " + ov.getPlans());
 					dst_nodes.add(possible_dst_nodes.get(i).get(j));
-					test = false;
-				}
-			}						
-		}
-		
+				}	
+				// ----------------------------------------------------------- //
+			}	
 			
-
-		/* creo un nuovo bpmn2 con i nuovi stati */
-		MyFile.createBackup(bpmn_url, true);
-		BpmnUpdater bu = null;
-		
-		for (int i = 0; i<plans.size(); i++) {
-			MyFile.createBackup(bpmn_url, false);
-			System.err.println(dst_nodes.get(i));
-			System.err.println(plans.get(i));
-			bu = new BpmnUpdater(plans.get(i), bpmn, from, dst_nodes.get(i));			
+			// --- exit condition management --- //
+			if (plans.size() == possible_dst_nodes.get(i).size()) {
+				cycle_condition = false;
+			} else {
+				plans.clear();
+			}
+			// --------------------------------- //
 		}
 		
+		/* create a backup of the bpmn2 file */
+		MyFile.createBackup(bpmn_url, true);
+		
+		/* for every plan found update the  */
+		BpmnUpdater bu = new BpmnUpdater(bpmn, from);
+		for (int i = 0; i<plans.size(); i++) {
+			bu.update(plans.get(i), dst_nodes.get(i));			
+		}
 	}
+	// =================================== end of main ======================================== //
 	
 	
-	
-	
-	
+
 	// ====================================== DEBUG =========================================== //
-	
-	/**
-	 * JUST PRINT TO UNDERSTAND IF INPUT IS WHATS INTENDED
-	 */
 	private static void DEBUG() {
 		System.err.println("DEBUG MODE: ON");
 	}
