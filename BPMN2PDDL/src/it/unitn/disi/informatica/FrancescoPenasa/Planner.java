@@ -21,7 +21,7 @@ public class Planner {
 	
 	// --------------------------------------- private ---------------------------------------- //	
 	private String outputPath = "";
-
+	private String command;
 	
 	// ====================================== METHODS ========================================= //
 	
@@ -42,12 +42,19 @@ public class Planner {
 		planner = planner.replace("domain0", domainPath);
 		planner = planner.replace("prob0", problemPath);
 		planner = planner.replace("output0", this.outputPath);
-		
-		String response = "";
-		String command = planner;
+		command = planner;
+	}
+	
+	
+	/**
+	 * execute the planner using the parameters given during the initialization of the class
+	 */
+	public void execute() {
+			
+		String response = "";		
 		boolean waitForResponse = true;
 		
-		System.out.println("Linux command: " + command);
+		System.out.println("Bash command executed: " + command);
 	
 		ProcessBuilder pb = new ProcessBuilder("bash", "-c", command);
 		pb.redirectErrorStream(true);
@@ -74,8 +81,7 @@ public class Planner {
 		} catch (InterruptedException e) {
 			System.out.println("Error occured while executing Linux command. Error Description: "
 					+ e.getMessage());
-		}
-		
+		}		
 		
 		System.out.println("Planner closed, result in --> " + outputPath);
 	}

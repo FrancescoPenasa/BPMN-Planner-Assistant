@@ -25,6 +25,7 @@ public class HelloBPMN {
 	private static String planner_url = "";
 	private static String from = "";
 	private static String pddl_path = "";
+	private static int distance = 30;
 	
 	// optional input parameters // 
 	private static String problem_max_conditions = "";
@@ -36,7 +37,8 @@ public class HelloBPMN {
 	
 	//---------------------------------------- private ---------------------------------------- //
 	/**
-	 * input handler 
+	 * input handler
+	 * manage the input arguments and store them in class parameters
 	 * @param args
 	 */
 	private static void input_manager(String[] args) {
@@ -73,6 +75,10 @@ public class HelloBPMN {
 				
 			case "-pddl":
 				pddl_path = args[++i];
+				break;
+				
+			case "-deviation":
+				distance = Integer.valueOf(args[++i]);
 				break;	
 
 			
@@ -87,19 +93,20 @@ public class HelloBPMN {
 				
 			default:
 				break;
-			}
-			
+			}			
 		}
+		
 		check_mandatory_input();
 	}
 	
 	
 	/**
-	 * check emptyness of mandatory inputs
+	 * check mandatory inputs parameters
 	 */
 	private static void check_mandatory_input() {
 		if (bpmn_url.isEmpty() || domain_url.isEmpty() || pddl_path.isEmpty() || planner_url.isEmpty()  || from.isEmpty()) {
 			System.err.println("error: wrong usage, use java BPMN_PDDL --help to see the correct usage");
+			System.exit(-1); 
 		}
 	}
 	
@@ -140,8 +147,8 @@ public class HelloBPMN {
 	
 	// ======================================= MAIN =========================================== //
 	/**
-	 * MAIN
-	 * @param args
+	 * MAIN METHOD
+	 * @param args -> input parameters	
 	 */
 	public static void main(String[] args) {
 		
@@ -166,14 +173,11 @@ public class HelloBPMN {
 		
 		//-------------------------------
 
-		
+		// class declaration before the cycle
 		ProblemGenerator pg = null;
-		Planner planner = null;
-		OutputSanitizer ov = null;		
+		OutputSanitizer ov = new OutputSanitizer();		
 		
-		int DISTANCE = 20; // TODO CHANGE
-		
-		// lists
+		// lists declaration before the cycle
 		List<List<List<List<String>>>> plans = new ArrayList<List<List<List<String>>>>();; // exclusive_bpmn, exclusive, time, actions
 		List<String> dst_nodes = new ArrayList<String>();
 		
@@ -207,20 +211,23 @@ public class HelloBPMN {
 				//---------------------------------- //
 						
 				// --- execute planner --- //
-				planner = new Planner(planner_url, domain_url, problem_url);
+				Planner planner = new Planner(planner_url, domain_url, problem_url);
+				planner.execute();
 				String planner_output = planner.getOutputURL();
 				// ----------------------- //
 				
 				// --- sanitize output --- //
-				ov = new OutputSanitizer (planner.getOutputURL());
+				ov.sanitize(planner_output);
 				// ----------------------- //
 				
 				// --- if output is valid and shorted than a certain value --- //
-				if (ov.getValidity(DISTANCE)) {
+				if (ov.getValidity(distance)) {
 					plans.add(ov.getPlans());
 					System.out.println("plan added " + ov.getPlans());
 					dst_nodes.add(possible_dst_nodes.get(i).get(j));
-				}	
+				} else {
+					ov.clear();
+				}
 				// ----------------------------------------------------------- //
 			}	
 			
@@ -241,6 +248,8 @@ public class HelloBPMN {
 		for (int i = 0; i<plans.size(); i++) {
 			bu.update(plans.get(i), dst_nodes.get(i));			
 		}
+		
+		System.exit(0);
 	}
 	// =================================== end of main ======================================== //
 	

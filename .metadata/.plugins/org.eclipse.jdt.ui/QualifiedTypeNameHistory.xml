@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.eclipse.bpmn2.modeler.core.utils.FileUtils"/>
-    <fullyQualifiedTypeName name="java.nio.file.CopyOption"/>
     <fullyQualifiedTypeName name="java.nio.file.StandardCopyOption"/>
     <fullyQualifiedTypeName name="java.nio.file.Path"/>
     <fullyQualifiedTypeName name="java.nio.file.Paths"/>
@@ -20,7 +18,6 @@
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="java.io.FileReader"/>
     <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.OutputWriter"/>
-    <fullyQualifiedTypeName name="java.lang.Integer"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.InclusiveGateway"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.Bpmn2Factory"/>
     <fullyQualifiedTypeName name="org.eclipse.bpmn2.di.BpmnDiFactory"/>
@@ -60,4 +57,7 @@
     <fullyQualifiedTypeName name="java.util.LinkedList"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.HelloBPMN.ExitCode"/>
+    <fullyQualifiedTypeName name="it.unitn.disi.informatica.FrancescoPenasa.OutputSanitizer"/>
 </qualifiedTypeNameHistroy>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="SequenceFlow_4"/>
+		<item key="selection" value="null"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="null"/>
 			<item value="sequenceFlow_4"/>
 			<item value="sequenceFlow"/>
 			<item value="sequenceFlow\"/>
@@ -22,7 +23,6 @@
 			<item value="already"/>
 			<item value="Please delete pippo"/>
 			<item value="&#x09;&#x09;// extract from bpmn"/>
-			<item value="Task"/>
 		</list>
 		<list key="replacehistory">
 			<item value="&quot;_To_&quot;"/>

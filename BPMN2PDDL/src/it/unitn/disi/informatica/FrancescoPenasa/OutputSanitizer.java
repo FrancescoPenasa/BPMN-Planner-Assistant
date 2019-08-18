@@ -18,10 +18,11 @@ public class OutputSanitizer {
 	// ===================================== PARAMETERS ======================================= //
 	
 	// --------------------------------------- private ---------------------------------------- //	
-	List<List<List<String>>> plans = new ArrayList<List<List<String>>>();
-	boolean no_solution = false;
+	private List<List<List<String>>> plans = new ArrayList<List<List<String>>>();
+	private boolean no_solution = false;
 	
 	
+	public OutputSanitizer() {}
 	
 	// ====================================== METHODS ========================================= //
 	
@@ -36,7 +37,7 @@ public class OutputSanitizer {
 	 * @param planner
 	 * @throws IOException
 	 */
-	public OutputSanitizer(String output_path) {		
+	public void sanitize(String output_path) {		
 		List<File> outputs = new ArrayList<File>();
 		no_solution = false;
 		// mi salvo tutti gli output ottenuti, che hanno sempre la forma "output_path_x.SOL"
@@ -107,8 +108,7 @@ public class OutputSanitizer {
 	
 	
 	/**
-	 * get states
-	 * @return
+	 * return parsed plan that contains the actions to upgrade the bpmn2 file
 	 */
 	public List<List<List<String>>> getPlans() {
 		return this.plans;
@@ -119,14 +119,29 @@ public class OutputSanitizer {
 	public String getMetrics() {
 		return null;
 	}
+	
+	/**
+	 * clear all the class parameters
+	 */
+	public void clear() {
+		plans.clear();
+		no_solution = false;
+	}
 
 
+	/**
+	 * get validity of the output file
+	 * if the output contains "no solution" or number of actions are more than DISTANCE return false
+	 * else return true
+	 * @param DISTANCE max number of actions.
+	 * @return true if valid, false if not valid
+	 */
 	public boolean getValidity(int DISTANCE) {
 		for (List<List<String>> plan : plans) {
 			if (plan.size() > DISTANCE)
 				return false;
 		}
-		if (no_solution) {
+		if (no_solution || plans.isEmpty()) {
 			return false;
 		}
 		return true;

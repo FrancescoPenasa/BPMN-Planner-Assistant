@@ -17,7 +17,7 @@ class ProblemGenerator {
 	
 	// ===================================== PARAMETERS ======================================= //
 	
-	// --------------------------------------- private ---------------------------------------- //	
+	// -------------------------------------- private ----------------------------------------- //	
 	private FileWriter writer = null;
 	private String nameFile = "";
 	
@@ -25,15 +25,13 @@ class ProblemGenerator {
 	
 	// ====================================== METHODS ========================================= //
 	
-	//---------------------------------------- public ----------------------------------------- //
+	//------------------------------------- constructors -------------------------------------- //
 	/**
-	 * questo costruttore si occupa di costrure il file pddl problem con le caratteristiche base,
-	 * cioè, si occupa di costruire un file di problem.pddl conforme alle caratteristiche di PDDL 1.1
-	 * con i requirements :strips :typing
+	 * ProblemGenerator create a problem.pddl file that contains the data to match a domain.pddl file 
+	 * the file will be readable for a planner that is able to read the syntax of pddl1.1
 	 * @param domain
-	 * @param objects
-	 * @param init
-	 * @param goals
+	 * @param from
+	 * @param to
 	 * @throws IOException
 	 */
 	public ProblemGenerator(String domain, String from, String to) throws IOException {
@@ -73,13 +71,14 @@ class ProblemGenerator {
 	
 
 	/**
-	 * questo costruttore si occupa di generare un file problem.pddl con nome @param domain + "_prob
+	 * ProblemGenerator create a problem.pddl file that contains the data to match a domain.pddl file 
+	 * the file will be readable for a planner that is able to read the syntax of pddl2.1 or pddl3.1 
+	 * due to the presence of the metrics section.
 	 * @param domain
-	 * @param objects
-	 * @param init
-	 * @param goals
-	 * @param costrain
-	 * @param condition
+	 * @param from
+	 * @param to
+	 * @param max_constraints
+	 * @param min_constraints
 	 * @throws IOException
 	 */
 	public ProblemGenerator(String domain, String from, String to, String max_constraints, String min_constraints) throws IOException {
@@ -217,10 +216,6 @@ class ProblemGenerator {
 	}
 	
 
-	/**
-	 * write definition and requirements on the domain file
-	 * @throws IOException
-	 */
 	private void writeIntro(String DOMAIN) throws IOException {		
 		writer.write(";; problem file: " + DOMAIN + "_prob0.pddl \n\n");		
 		writer.write("(define (problem " + DOMAIN + "_prob0)\n");
@@ -228,10 +223,6 @@ class ProblemGenerator {
 	}
 	
 	
-	/**
-	 * write definition and requirements on the domain file
-	 * @throws IOException
-	 */
 	private void writeIntro(String DOMAIN, String constraints) throws IOException {	
 		constraints = constraints.replaceAll(" ", "_");
 		constraints = constraints.replaceAll("\\(", "");
@@ -243,27 +234,13 @@ class ProblemGenerator {
 	}
 	
 	
-	//-------------------- INIT -------------------///
-	// (at rabbit a) (at carrot b) (at box c)
-	/**
-	 * 
-	 * @param INIT
-	 * @throws IOException
-	 */
 	private void writeInit(String INIT) throws IOException {
 		writer.write("\t(:init\n");
 		writer.write("\t\t" + INIT + "\n");
 		writer.write("\t)\n\n");
 	}
-	
-	
-	//-------------------- INIT -------------------///
-	// (at rabbit a) (at carrot b) (at box c)
-	/**
-	 * 
-	 * @param INIT
-	 * @throws IOException
-	 */
+		
+
 	private void writeInit(String INIT, String constraint) throws IOException {
 		writer.write("\t(:init\n");
 		writer.write("\t\t" + INIT + "\n");
@@ -276,15 +253,8 @@ class ProblemGenerator {
 		}
 		writer.write("\t)\n\n");
 	}
-	
-	
-	//------------------------ OBJECTS ------------------------//
-	// OBJ should be something like carrot rabbit box a b c
-	/**
-	 * 
-	 * @param OBJ
-	 * @throws IOException
-	 */
+		
+
 	private void writeObjects(String OBJ) throws IOException {
 		writer.write("\t(:objects\n");
 		writer.write("\t\t" + OBJ + "\n");
@@ -292,17 +262,12 @@ class ProblemGenerator {
 	}
 	
 	
-	/**
-	 * 
-	 * @throws IOException
-	 */
 	private void writeOutro() throws IOException {
 		final String OUTRO = new String(")");
 		writer.write(OUTRO);
 	}
 
 	
-	//-------------- GOAL ----------------------------//
 	private void writeGoal(String goal) throws IOException {
 		writer.write("\t(:goal\n");
 		writer.write("\t\t" + goal + "\n");
@@ -331,10 +296,6 @@ class ProblemGenerator {
 
 	
 	// =============================== SETTER AND GETTER ====================================== //
-	public Object getPath() {
-		return "pat";
-	}
-
 	public String getUrl() {
 		return this.nameFile;
 	}

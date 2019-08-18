@@ -16,7 +16,7 @@ public class FileScrapper {
 	
 	// --------------------------------------- public ----------------------------------------- //	
 	/**
-	 * 
+	 * get domain name from a domani.pddl file
 	 * @param url
 	 * @return
 	 */
