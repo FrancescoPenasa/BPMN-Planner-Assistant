@@ -25,9 +25,9 @@ public class HelloBPMN {
 	private static String planner_url = "";
 	private static String from = "";
 	private static String pddl_path = "";
-	private static int distance = 30;
 	
 	// optional input parameters // 
+	private static int distance = 30;
 	private static String problem_max_conditions = "";
 	private static String problem_min_conditions = "";
 	
@@ -107,6 +107,10 @@ public class HelloBPMN {
 		if (bpmn_url.isEmpty() || domain_url.isEmpty() || pddl_path.isEmpty() || planner_url.isEmpty()  || from.isEmpty()) {
 			System.err.println("error: wrong usage, use java BPMN_PDDL --help to see the correct usage");
 			System.exit(-1); 
+		}
+		if (! problem_max_conditions.isEmpty() && ! problem_min_conditions.isEmpty()) {
+			System.err.println("error: max and min are to exclusive conditions, please use only one of those");
+			System.exit(-1);
 		}
 	}
 	
